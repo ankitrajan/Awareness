@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ankit.awareness.MyAccountActivity">
+
+    <TextView
+        android:id="@+id/device1"
+        android:layout_width="385dp"
+        android:layout_height="40dp"
+        android:text="First Device"
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/device2"
+        android:layout_width="385dp"
+        android:layout_height="40dp"
+        android:text="Second Device"
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/device1" />
+</android.support.constraint.ConstraintLayout>

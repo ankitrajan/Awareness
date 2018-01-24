@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "884646221100",
+    "firebase_url": "https://awareness490.firebaseio.com",
+    "project_id": "awareness490",
+    "storage_bucket": "awareness490.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884646221100:android:b67c74345c1eb9ff",
+        "android_client_info": {
+          "package_name": "com.example.ankit.awareness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884646221100-1fqcfsn2bj8p0isksko0drhr97rd74b3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ankit.awareness",
+            "certificate_hash": "5d6690a2537a5fb5acb1c7c973183414b2d29b2f"
+          }
+        },
+        {
+          "client_id": "884646221100-omkb88u5bu5110pipcsq84s3vftunjb9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCJ5Bvs-oPmKV808O5WT5rHjVDW92vD9U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884646221100-omkb88u5bu5110pipcsq84s3vftunjb9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
