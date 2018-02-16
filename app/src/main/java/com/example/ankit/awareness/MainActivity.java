@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity
     private EditText passwordText;
 
     protected Button loginButton;
-    protected Button createAccountButton;
+    //protected Button createAccountButton;
     protected Button resetPasswordButton;
 
     @Override
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
         passwordText = (EditText) findViewById(R.id.PasswordField);
 
         loginButton = (Button) findViewById(R.id.Login);
-        createAccountButton = (Button) findViewById(R.id.CreateAccount);
+        //createAccountButton = (Button) findViewById(R.id.CreateAccount);
         resetPasswordButton = (Button) findViewById(R.id.ResetPassword);
 
         authListener = new FirebaseAuth.AuthStateListener()
@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
+        /*
         createAccountButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity
                 goToCreateAccountActivity();
             }
         });
+        */
 
         loginButton.setOnClickListener(new View.OnClickListener()
         {
@@ -100,11 +102,13 @@ public class MainActivity extends AppCompatActivity
         firebaseAuth.addAuthStateListener(authListener);
     }
 
+    /*
     void goToCreateAccountActivity()
     {
         Intent intent = new Intent(MainActivity.this, CreateAccountActivity.class);
         startActivity(intent);
     }
+    */
 
     void startLogin()
     {
