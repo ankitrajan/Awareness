@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity
         emailText = (EditText) findViewById(R.id.EmailField);
         passwordText = (EditText) findViewById(R.id.PasswordField);
 
+        //EditText username = (EditText)findViewById(R.id.EmailField);
+        //if( username.getText().toString().length() == 0 )
+          //  username.setError( "First name is required!" );
+
         loginButton = (Button) findViewById(R.id.Login);
         //createAccountButton = (Button) findViewById(R.id.CreateAccount);
         resetPasswordButton = (Button) findViewById(R.id.ResetPassword);
@@ -118,6 +122,10 @@ public class MainActivity extends AppCompatActivity
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
+        //EditText username = (EditText)findViewById(R.id.EmailField); (ahmed)
+        //if( username.getText().toString().length() == 0 )  (ahmed)
+        //  username.setError( "First name is required!" ); (ahmed)
+
         if(!(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)))
         {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
@@ -153,6 +161,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
             Toast.makeText(MainActivity.this, "Field(s) is/are empty", Toast.LENGTH_LONG).show();
+       // emailText.setError(null); (ahmed)
     }
 
     void goToMyAccountActivity()
