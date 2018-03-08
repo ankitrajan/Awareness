@@ -1,6 +1,7 @@
 package com.example.ankit.awareness;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -100,6 +101,12 @@ public class CreateAccountActivity extends AppCompatActivity
                                                 Toast.makeText(CreateAccountActivity.this, "Verification email was sent", Toast.LENGTH_LONG).show();
 
                                                 String newUser = user.getUid().toString();
+
+                                                SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = myPref.edit();
+                                                editor.putString("UserID", newUser);
+                                                editor.putBoolean("First Login", true);
+                                                editor.apply();
 
                                                 databaseReference.child("Users").child(newUser).child("First Name").setValue(firstName);
 

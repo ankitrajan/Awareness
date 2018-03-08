@@ -1,10 +1,12 @@
 package com.example.ankit.awareness;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -29,16 +31,18 @@ public class MainActivity extends AppCompatActivity
     private EditText passwordText;
 
     protected Button loginButton;
-    //protected Button createAccountButton;
     protected Button resetPasswordButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setContentView(R.layout.activity_main);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -46,7 +50,6 @@ public class MainActivity extends AppCompatActivity
         passwordText = (EditText) findViewById(R.id.PasswordField);
 
         loginButton = (Button) findViewById(R.id.Login);
-        //createAccountButton = (Button) findViewById(R.id.CreateAccount);
         resetPasswordButton = (Button) findViewById(R.id.ResetPassword);
 
         authListener = new FirebaseAuth.AuthStateListener()
@@ -60,22 +63,23 @@ public class MainActivity extends AppCompatActivity
                 {
                     if (firebaseAuth.getCurrentUser().isEmailVerified())
                     {
-                        Toast.makeText(MainActivity.this, "attempting to log in", Toast.LENGTH_LONG).show();
-                        goToMyAccountActivity();
+                        SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                        Boolean firstLogin = myPref.getBoolean("First Login", true);
+
+                        if(firstLogin)
+                        {
+                            //Toast.makeText(MainActivity.this, "First Login", Toast.LENGTH_LONG).show();
+                            goToAddDeviceActivity();
+                        }
+                        else if(!firstLogin)
+                        {
+                            //Toast.makeText(MainActivity.this, "Not First Login", Toast.LENGTH_LONG).show();
+                            goToMyAccountActivity();
+                        }
                     }
                 }
             }
         };
-
-        /*
-        createAccountButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                goToCreateAccountActivity();
-            }
-        });
-        */
 
         loginButton.setOnClickListener(new View.OnClickListener()
         {
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                //resetPassword();
+                goToResetActivity();
             }
         });
     }
@@ -102,17 +106,8 @@ public class MainActivity extends AppCompatActivity
         firebaseAuth.addAuthStateListener(authListener);
     }
 
-    /*
-    void goToCreateAccountActivity()
-    {
-        Intent intent = new Intent(MainActivity.this, CreateAccountActivity.class);
-        startActivity(intent);
-    }
-    */
-
     void startLogin()
     {
-
         FirebaseAuth.getInstance().signOut();
 
         String email = emailText.getText().toString();
@@ -155,9 +150,21 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(MainActivity.this, "Field(s) is/are empty", Toast.LENGTH_LONG).show();
     }
 
+    void goToAddDeviceActivity()
+    {
+        Intent intent = new Intent(MainActivity.this, AddDeviceActivity.class);
+        startActivity(intent);
+    }
+
     void goToMyAccountActivity()
     {
         Intent intent = new Intent(MainActivity.this, MyAccountActivity.class);
+        startActivity(intent);
+    }
+
+    void goToResetActivity()
+    {
+        Intent intent = new Intent(MainActivity.this, ResetActivity.class);
         startActivity(intent);
     }
 }
