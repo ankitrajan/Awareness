@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class LogoActivity extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
 
     protected Button mainButton;
     protected Button signUpButton;
@@ -18,6 +22,11 @@ public class LogoActivity extends AppCompatActivity {
 
         mainButton = (Button) findViewById(R.id.Main);
         signUpButton = (Button) findViewById(R.id.SignUp);
+
+        DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
+
+        myDatabase.deleteAllData();
+        myDatabase.deleteAllDevice();
 
         mainButton.setOnClickListener(new View.OnClickListener()
         {

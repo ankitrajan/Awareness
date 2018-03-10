@@ -77,6 +77,9 @@ public class MyAccountActivity extends AppCompatActivity {
 
         //DatabaseReference newRef = databaseReference.child("Users").child(userID).child("First Name").getRef();
 
+        
+        /*newRef.addValueEventListener(new ValueEventListener()
+
 
         /*newRef.addValueEventListener(new ValueEventListener()
         {
@@ -92,16 +95,35 @@ public class MyAccountActivity extends AppCompatActivity {
 
             }
         });
-*/
+
         deviceList = (ListView) findViewById(R.id.DeviceList);
 
         final DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
+        DatabaseReference deviceRef = databaseReference.child("Users").child(userID).child("Linked Device").getRef();
+
+        deviceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = myPref.edit();
+                editor.putString("deviceID", dataSnapshot.getValue().toString());
+                editor.apply();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         String deviceID = myPref.getString("deviceID", "No device");
 
-        DatabaseReference applianceRef = databaseReference.child("Devices").child(deviceID).child("Appliances").getRef();
+        //Toast.makeText(getApplicationContext(),"DeviceID " + deviceID, Toast.LENGTH_LONG).show();
 
-        //final Vector<String> allDev = new Vector<String>();
+        DatabaseReference applianceRef = databaseReference.child("Devices").child(deviceID).child("Appliances").getRef();
 
         applianceRef.addChildEventListener(new ChildEventListener()
         {

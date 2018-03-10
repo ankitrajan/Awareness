@@ -9,9 +9,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 public class AnalysisActivity extends AppCompatActivity {
@@ -27,7 +30,69 @@ public class AnalysisActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
 
-        //Toast.makeText(getApplicationContext(),getIntent().getExtras().getString("DEVICENAME"), Toast.LENGTH_LONG).show();
+
+
+
+
+ /*
+        String currentDevice = getIntent().getExtras().getString("DEVICENAME");
+
+        graph = (GraphView) findViewById(R.id.DeviceGraph);
+
+        applianceName = (TextView) findViewById(R.id.ApplianceName);
+
+        refreshGraphButton = (Button) findViewById(R.id.RefreshGraph);
+
+        applianceName.setText(currentDevice);
+
+
+        //generate Dates
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d3 = calendar.getTime();
+
+/*
+        Date d1 = new Date(2018, 12, 8, 20, 38, 15);
+        Date d2 = new Date(2018, 12, 9, 20, 38, 15);
+        Date d3 = new Date(2018, 12, 10, 20, 38, 15);
+
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 1988);
+        cal.set(Calendar.MONTH, Calendar.JANUARY);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date dateRepresentation = cal.getTime();
+*/
+
+
+// you can directly pass Date objects to DataPoint-Constructor
+// this will convert the Date to double via Date#getTime()
+        /*
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(d1, 1),
+                new DataPoint(d2, 5),
+                new DataPoint(d3, 3)
+        });
+
+        graph.addSeries(series);
+*/
+// set date label formatter
+        //graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getApplicationContext()));
+        //graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
+
+// set manual x bounds to have nice steps
+        //graph.getViewport().setMinX(d1.getTime());
+        //graph.getViewport().setMaxX(d3.getTime());
+        //graph.getViewport().setXAxisBoundsManual(true);
+
+// as we use dates as labels, the human rounding to nice readable numbers
+// is not necessary
+        //graph.getGridLabelRenderer().setHumanRounding(false);
+
+
 
         String currentDevice = getIntent().getExtras().getString("DEVICENAME");
 
@@ -102,7 +167,12 @@ public class AnalysisActivity extends AppCompatActivity {
         */
 
         deviceGraph.addSeries(deviceSeries);
-        //deviceGraph.addSeries(series);
+
+
+
+
+        /////deviceGraph.addSeries(series);
+
     }
 
     void refreshGraph()
