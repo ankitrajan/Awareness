@@ -30,12 +30,12 @@ public class CreateAccountActivity extends AppCompatActivity
 
     private Button createButton;
 
-    private EditText firstNameText;
-    private EditText lastNameText;
-    private EditText ageText;
+    //private EditText firstNameText;
+    //private EditText lastNameText;
+    //private EditText ageText;
     private EditText emailText;
     private EditText passwordText;
-    private EditText phoneNumberText;
+    //private EditText phoneNumberText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,12 +50,12 @@ public class CreateAccountActivity extends AppCompatActivity
 
         createButton = (Button) findViewById(R.id.CreateNewAccount);
 
-        firstNameText = (EditText) findViewById(R.id.FirstNameField);
-        lastNameText = (EditText) findViewById(R.id.LastNameField);
-        ageText = (EditText) findViewById(R.id.AgeField);
+        //firstNameText = (EditText) findViewById(R.id.FirstNameField);
+        //lastNameText = (EditText) findViewById(R.id.LastNameField);
+        //ageText = (EditText) findViewById(R.id.AgeField);
         emailText = (EditText) findViewById(R.id.EmailField);
         passwordText = (EditText) findViewById(R.id.PasswordField);
-        phoneNumberText = (EditText) findViewById(R.id.PhoneNumberField);
+        //phoneNumberText = (EditText) findViewById(R.id.PhoneNumberField);
 
         createButton.setOnClickListener(new View.OnClickListener()
         {
@@ -69,14 +69,14 @@ public class CreateAccountActivity extends AppCompatActivity
 
     private void createAccount()
     {
-        final String firstName = firstNameText.getText().toString();
-        final String lastName = lastNameText.getText().toString();
-        final String age = ageText.getText().toString();
+        //final String firstName = firstNameText.getText().toString();
+        //final String lastName = lastNameText.getText().toString();
+        //final String age = ageText.getText().toString();
         final String email = emailText.getText().toString();
         final String password = passwordText.getText().toString();
-        final String phoneNumber = phoneNumberText.getText().toString();
+        //final String phoneNumber = phoneNumberText.getText().toString();
 
-        if (!(TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || TextUtils.isEmpty(age) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(phoneNumber)))
+        if (!(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)))
         {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
@@ -108,15 +108,15 @@ public class CreateAccountActivity extends AppCompatActivity
                                                 editor.putBoolean("First Login", true);
                                                 editor.apply();
 
-                                                databaseReference.child("Users").child(newUser).child("First Name").setValue(firstName);
+                                                //databaseReference.child("Users").child(newUser).child("First Name").setValue(firstName);
 
                                                 DatabaseReference newUserReference = databaseReference.child("Users").child(newUser).getRef();
 
-                                                newUserReference.child("Last Name").setValue(lastName);
-                                                newUserReference.child("Age").setValue(age);
+                                                //newUserReference.child("Last Name").setValue(lastName);
+                                                //newUserReference.child("Age").setValue(age);
                                                 newUserReference.child("Email").setValue(email);
                                                 newUserReference.child("Password").setValue(password);
-                                                newUserReference.child("Phone Number").setValue(phoneNumber);
+                                                //newUserReference.child("Phone Number").setValue(phoneNumber);
 
                                                 firebaseAuth.signOut();
 

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,19 +20,25 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
 {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authListener;
+    private DatabaseReference databaseReference;
 
     private EditText emailText;
     private EditText passwordText;
 
     protected Button loginButton;
     protected Button resetPasswordButton;
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,11 +53,24 @@ public class MainActivity extends AppCompatActivity
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        Log.d(TAG,"connected to firebase");
+
         emailText = (EditText) findViewById(R.id.EmailField);
         passwordText = (EditText) findViewById(R.id.PasswordField);
 
         loginButton = (Button) findViewById(R.id.Login);
         resetPasswordButton = (Button) findViewById(R.id.ResetPassword);
+
+        DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
+
+        myDatabase.deleteAllData();
+        myDatabase.deleteAllDevice();
+
+        Log.d(TAG, "Works till before signOut()");
+
+        firebaseAuth.signOut();
+
+        Log.d(TAG, "Works till after signOut()");
 
         authListener = new FirebaseAuth.AuthStateListener()
         {
@@ -63,19 +83,41 @@ public class MainActivity extends AppCompatActivity
                 {
                     if (firebaseAuth.getCurrentUser().isEmailVerified())
                     {
-                        SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                        Boolean firstLogin = myPref.getBoolean("First Login", true);
+                        databaseReference = FirebaseDatabase.getInstance().getReference();
 
-                        if(firstLogin)
-                        {
-                            //Toast.makeText(MainActivity.this, "First Login", Toast.LENGTH_LONG).show();
-                            goToAddDeviceActivity();
-                        }
-                        else if(!firstLogin)
-                        {
-                            //Toast.makeText(MainActivity.this, "Not First Login", Toast.LENGTH_LONG).show();
-                            goToMyAccountActivity();
-                        }
+                        final String currentUser = firebaseAuth.getCurrentUser().getUid().toString();
+
+                        DatabaseReference userHasDeviceRef = databaseReference.child("Users").child(currentUser).getRef();
+
+                        userHasDeviceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.hasChild("Linked Device")) {
+                                    SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = myPref.edit();
+                                    editor.putString("deviceID", dataSnapshot.child("Linked Device").getValue().toString());
+                                    editor.putString("UserID", currentUser);
+                                    editor.putBoolean("First Login", false);
+                                    editor.apply();
+                                    goToMyAccountActivity();
+                                }
+                                else
+                                {
+                                    SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = myPref.edit();
+                                    editor.putString("UserID", currentUser);
+                                    editor.putBoolean("First Login", true);
+                                    editor.apply();
+                                    goToMyAccountActivity();
+                                    goToAddDeviceActivity();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 }
             }

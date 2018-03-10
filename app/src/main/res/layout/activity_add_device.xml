@@ -8,6 +8,8 @@
 
     <EditText
         android:id="@+id/DevicePasswordField"
+        android:maxLength="10"
+        android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -26,6 +28,8 @@
 
     <EditText
         android:id="@+id/DeviceField"
+        android:maxLength="10"
+        android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
