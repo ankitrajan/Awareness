@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -163,7 +164,16 @@ public class MainActivity extends AppCompatActivity
                 public void onComplete(@NonNull Task<AuthResult> task)
                 {
                     if (!(task.isSuccessful()))
-                        Toast.makeText(MainActivity.this, "Email/Password incorrect", Toast.LENGTH_LONG).show();
+                    {
+                        try {
+                            throw task.getException();
+                        } catch(FirebaseAuthInvalidUserException e) {
+                            Toast.makeText(MainActivity.this, "Email incorrect", Toast.LENGTH_LONG).show();
+                        } catch(Exception e) {
+                            Toast.makeText(MainActivity.this, "Password incorrect", Toast.LENGTH_LONG).show();
+                        }
+                        //Toast.makeText(MainActivity.this, "Email/Password incorrect", Toast.LENGTH_LONG).show();
+                    }
                     else
                     {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
