@@ -75,27 +75,6 @@ public class MyAccountActivity extends AppCompatActivity {
 
         String userID = firebaseAuth.getCurrentUser().getUid();
 
-        //DatabaseReference newRef = databaseReference.child("Users").child(userID).child("First Name").getRef();
-
-        
-        /*newRef.addValueEventListener(new ValueEventListener()
-
-
-        /*newRef.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot);
-            {
-                //getSupportActionBar().setTitle("Welcome, " + dataSnapshot.getValue().toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-
-            }
-        });
-
         deviceList = (ListView) findViewById(R.id.DeviceList);
 
         final DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
