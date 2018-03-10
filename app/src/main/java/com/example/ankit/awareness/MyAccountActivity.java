@@ -77,11 +77,14 @@ public class MyAccountActivity extends AppCompatActivity {
 
         //DatabaseReference newRef = databaseReference.child("Users").child(userID).child("First Name").getRef();
 
-        /*
-        newRef.addValueEventListener(new ValueEventListener()
+        
+        /*newRef.addValueEventListener(new ValueEventListener()
+
+
+        /*newRef.addValueEventListener(new ValueEventListener()
         {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            public void onDataChange(DataSnapshot dataSnapshot);
             {
                 //getSupportActionBar().setTitle("Welcome, " + dataSnapshot.getValue().toString());
             }
@@ -92,7 +95,6 @@ public class MyAccountActivity extends AppCompatActivity {
 
             }
         });
-        */
 
         deviceList = (ListView) findViewById(R.id.DeviceList);
 
