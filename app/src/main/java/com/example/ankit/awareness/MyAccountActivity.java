@@ -2,6 +2,8 @@ package com.example.ankit.awareness;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -26,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class MyAccountActivity extends AppCompatActivity {
@@ -40,11 +49,49 @@ public class MyAccountActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
 
+    PieChart pieChart;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setContentView(R.layout.activity_my_account);
+
+        pieChart = (PieChart) findViewById(R.id.piechart);
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        //pieChart.setExtraOffsets(1,1,100,10);
+
+        pieChart.setDragDecelerationFrictionCoef(0.99f);
+
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.TRANSPARENT);
+        pieChart.setTransparentCircleRadius(55f);
+
+        ArrayList<PieEntry> yValues = new ArrayList<>();
+
+        yValues.add(new PieEntry(50f,"heater"));
+        yValues.add(new PieEntry(23f,"mixer"));
+        yValues.add(new PieEntry(14f,"refrigerator"));
+        yValues.add(new PieEntry(35f,"laptop"));
+        yValues.add(new PieEntry(40f,"television"));
+        yValues.add(new PieEntry(23f,"lamp"));
+
+
+        pieChart.animateY(2500,Easing.EasingOption.EaseInOutCubic);
+
+        PieDataSet dataSet = new PieDataSet(yValues,"Appliances");
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(4f);
+        dataSet.setColors(ColorCustomized.DARK_COLORS);
+
+        PieData data = new PieData ((dataSet));
+        data.setValueTextSize(10f);
+        data.setValueTextColor(Color.WHITE);
+
+
+        pieChart.setData(data);
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
