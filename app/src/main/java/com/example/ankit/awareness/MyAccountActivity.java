@@ -46,12 +46,7 @@ public class MyAccountActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private ListView deviceList;
 
-    private TextView statsField;
-
     private DataHelper myDataHelper;
-
-    private Button refreshButton;
-    private Button signOutButton;
 
     private static final String TAG = "MyAccountActivity";
 
@@ -77,59 +72,12 @@ public class MyAccountActivity extends AppCompatActivity {
         pieChart.setHoleColor(Color.TRANSPARENT);
         pieChart.setTransparentCircleRadius(55f);
 
-        ArrayList<PieEntry> yValues = new ArrayList<>();
-
-        yValues.add(new PieEntry(50f,"heater"));
-        yValues.add(new PieEntry(23f,"mixer"));
-        yValues.add(new PieEntry(14f,"refrigerator"));
-        yValues.add(new PieEntry(35f,"laptop"));
-        yValues.add(new PieEntry(40f,"television"));
-        yValues.add(new PieEntry(23f,"lamp"));
-
-
-        pieChart.animateY(2500,Easing.EasingOption.EaseInOutCubic);
-
-        PieDataSet dataSet = new PieDataSet(yValues,"Appliances");
-        dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(4f);
-        dataSet.setColors(ColorCustomized.DARK_COLORS);
-
-        PieData data = new PieData ((dataSet));
-        data.setValueTextSize(10f);
-        data.setValueTextColor(Color.WHITE);
-
-
-        pieChart.setData(data);
-
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        statsField = (TextView) findViewById(R.id.StatsField);
-
-        refreshButton = (Button) findViewById(R.id.Refresh);
-        signOutButton = (Button) findViewById(R.id.SignOut);
 
         myDataHelper = new DataHelper(getApplicationContext());
 
         myDataHelper.emptyData();
-
-        refreshButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                refresh();
-            }
-        });
-
-        signOutButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                signOut();
-            }
-        });
 
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1);
@@ -165,8 +113,6 @@ public class MyAccountActivity extends AppCompatActivity {
 
         String deviceID = myPref.getString("deviceID", "No device");
 
-        //Toast.makeText(getApplicationContext(),"DeviceID " + deviceID, Toast.LENGTH_LONG).show();
-
         DatabaseReference applianceRef = databaseReference.child("Devices").child(deviceID).child("Appliances").getRef();
 
         applianceRef.addChildEventListener(new ChildEventListener()
@@ -180,10 +126,7 @@ public class MyAccountActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s)
-            {
-                //Toast.makeText(getApplicationContext(), "child changed in " + dataSnapshot.getKey().toString(), Toast.LENGTH_LONG).show();
-            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot)
@@ -192,15 +135,10 @@ public class MyAccountActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                //Toast.makeText(getApplicationContext(),"In appliance: " + dataSnapshot.getKey().toString() + " moved", Toast.LENGTH_LONG).show();
-            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //Toast.makeText(getApplicationContext(), "onCancelled", Toast.LENGTH_LONG).show();
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
         displayList();
@@ -256,13 +194,10 @@ public class MyAccountActivity extends AppCompatActivity {
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         final String deviceID = myPref.getString("deviceID", "No device");
 
-        //Toast.makeText(getApplicationContext(), "Device name: " + addedDevice + " deviceID: " + deviceID, Toast.LENGTH_LONG).show();
-
         final DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
         final String deviceName = addedDevice;
         DatabaseReference deviceRef = databaseReference.child("Devices").child(deviceID).child("Appliances").child(deviceName).getRef();
-
 
         deviceRef.addChildEventListener(new ChildEventListener()
         {
@@ -287,9 +222,7 @@ public class MyAccountActivity extends AppCompatActivity {
             public void onChildChanged(DataSnapshot dataSnapshot, String s)
             {
                 if(dataSnapshot.getKey().toString().equals("status"))
-                {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
-                }
 
                 Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
             }
@@ -308,16 +241,27 @@ public class MyAccountActivity extends AppCompatActivity {
     void setDataText()
     {
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
+
         Vector<Double> allData = myDatabase.getAllData();
         Vector<String> allDevice = myDatabase.getAllDevice();
         Vector<Double> deviceData = new Vector<Double>();
 
-        String dataString = "";
+        ArrayList<PieEntry> yValues = new ArrayList<>();
+
+        /*
+        yValues.add(new PieEntry(50f,"heater"));
+        yValues.add(new PieEntry(23f,"mixer"));
+        yValues.add(new PieEntry(14f,"refrigerator"));
+        yValues.add(new PieEntry(35f,"laptop"));
+        yValues.add(new PieEntry(40f,"television"));
+        yValues.add(new PieEntry(23f,"lamp"));
+        */
+
 
         for(int i = 0; i < allDevice.size(); i++)
         {
             deviceData.add(myDatabase.getSpecificDataTotal(allDevice.elementAt(i)));
-            dataString = dataString + Double.toString(deviceData.elementAt(i)) + " ";
+            yValues.add(new PieEntry(deviceData.elementAt(i).floatValue(), allDevice.elementAt(i)));
         }
 
         double total = 0;
@@ -325,16 +269,25 @@ public class MyAccountActivity extends AppCompatActivity {
         for(int i = 0; i < allData.size(); i++)
             total += allData.elementAt(i);
 
-        dataString = dataString + Double.toString(total);
+        pieChart.animateY(2500,Easing.EasingOption.EaseInOutCubic);
 
-        statsField.setText(dataString);
+        PieDataSet dataSet = new PieDataSet(yValues,"Appliances");
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(4f);
+        dataSet.setColors(ColorCustomized.DARK_COLORS);
+
+        PieData data = new PieData ((dataSet));
+        data.setValueTextSize(10f);
+        data.setValueTextColor(Color.WHITE);
+
+
+        pieChart.setData(data);
     }
 
     void refresh()
     {
         setDataText();
     }
-
 
     void signOut()
     {
@@ -357,13 +310,15 @@ public class MyAccountActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.sign_out:
-                userSignOut();
-                startActivity(new Intent(MyAccountActivity.this, MainActivity.class));
-                Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
+                signOut();
                 return true;
 
             case R.id.settings:
                 startActivity(new Intent(MyAccountActivity.this, SettingsActivity.class));
+                return true;
+
+            case R.id.refresh:
+                refresh();
                 return true;
 
             default:

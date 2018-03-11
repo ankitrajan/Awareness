@@ -11,27 +11,27 @@
         android:roundIcon="@mipmap/ic_awareness"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
-        <activity android:name=".LogoActivity">
+        <activity android:name=".LogoActivity" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateAccountActivity" />
+        <activity android:name=".CreateAccountActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".MyAccountActivity" />
         <activity
             android:name=".AnalysisActivity"
             android:hardwareAccelerated="true">
         </activity>
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ankit.awareness.MainActivity" />
         </activity>
-        <activity android:name=".ResetActivity" />
-        <activity android:name=".AddDeviceActivity"></activity>
+        <activity android:name=".ResetActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".AddDeviceActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 
