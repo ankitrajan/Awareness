@@ -3,6 +3,7 @@ package com.example.ankit.awareness;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,8 +31,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
 {
+
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authListener;
     private DatabaseReference databaseReference;
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setContentView(R.layout.activity_main);
@@ -142,6 +150,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+
     protected void onStart()
     {
         super.onStart();
@@ -168,9 +177,11 @@ public class MainActivity extends AppCompatActivity
                         try {
                             throw task.getException();
                         } catch(FirebaseAuthInvalidUserException e) {
-                            Toast.makeText(MainActivity.this, "Email incorrect", Toast.LENGTH_LONG).show();
+                            emailText.setError("Email incorrect");
+                            //Toast.makeText(MainActivity.this, "Email incorrect", Toast.LENGTH_LONG).show();
                         } catch(Exception e) {
-                            Toast.makeText(MainActivity.this, "Password incorrect", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MainActivity.this, "Password incorrect", Toast.LENGTH_LONG).show();
+                            passwordText.setError("Password incorrect");
                         }
                         //Toast.makeText(MainActivity.this, "Email/Password incorrect", Toast.LENGTH_LONG).show();
                     }
@@ -198,8 +209,10 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
-        else
-            Toast.makeText(MainActivity.this, "Field(s) is/are empty", Toast.LENGTH_LONG).show();
+        //else
+            //emailText.setError("Email empty");
+           // passwordText.setError("Password empty");
+        //    Toast.makeText(MainActivity.this, "Field(s) is/are empty", Toast.LENGTH_LONG).show();
     }
 
     void goToAddDeviceActivity()
