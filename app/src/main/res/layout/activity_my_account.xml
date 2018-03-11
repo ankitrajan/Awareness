@@ -48,6 +48,30 @@
         app:layout_constraintStart_toEndOf="@+id/Refresh"
         app:layout_constraintTop_toBottomOf="@+id/DeviceList"
         app:layout_constraintVertical_bias="0.471" />
+  
+   <ListView
+        android:id="@+id/DeviceList"
+        android:layout_width="340dp"
+        android:layout_height="200dp"
+        android:layout_above="@+id/SignOut"
+        android:layout_alignStart="@+id/piechart"
+        android:layout_marginBottom="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/StatsField"
+        android:layout_width="333dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/piechart"
@@ -56,11 +80,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"></com.github.mikephil.charting.charts.PieChart>
-
-
-
-
-
 
 </RelativeLayout>
 

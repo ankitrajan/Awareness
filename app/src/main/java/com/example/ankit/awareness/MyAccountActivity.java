@@ -8,6 +8,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,10 +43,17 @@ public class MyAccountActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
 
+    private ArrayAdapter<String> adapter;
     private ListView deviceList;
+
+    private TextView statsField;
+
+    private DataHelper myDataHelper;
 
     private Button refreshButton;
     private Button signOutButton;
+
+    private static final String TAG = "MyAccountActivity";
 
     private BottomNavigationView bottomNavigationView;
 
@@ -96,9 +104,14 @@ public class MyAccountActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        statsField = (TextView) findViewById(R.id.StatsField);
 
         refreshButton = (Button) findViewById(R.id.Refresh);
         signOutButton = (Button) findViewById(R.id.SignOut);
+
+        myDataHelper = new DataHelper(getApplicationContext());
+
+        myDataHelper.emptyData();
 
         refreshButton.setOnClickListener(new View.OnClickListener()
         {
@@ -117,6 +130,11 @@ public class MyAccountActivity extends AppCompatActivity {
                 signOut();
             }
         });
+
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1);
+
+        adapter.add("All");
 
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
@@ -158,6 +176,7 @@ public class MyAccountActivity extends AppCompatActivity {
             {
                 myDatabase.addDevice(dataSnapshot.getKey().toString(), "connected");
                 collectDeviceData(dataSnapshot.getKey().toString());
+                adapter.add(dataSnapshot.getKey().toString());
             }
 
             @Override
@@ -202,9 +221,6 @@ public class MyAccountActivity extends AppCompatActivity {
             myStrings[j] = myDevices.elementAt(j-1);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, myStrings);
-
         // Assign adapter to ListView
         deviceList.setAdapter(adapter);
 
@@ -219,11 +235,11 @@ public class MyAccountActivity extends AppCompatActivity {
                 int itemPosition = position;
 
                 // ListView Clicked item value
-                String  itemValue    = (String) deviceList.getItemAtPosition(position);
+                //String itemValue = (String) deviceList.getItemAtPosition(position);
 
                 Intent intent= new Intent(MyAccountActivity.this, AnalysisActivity.class);
                 if(itemPosition != 0)
-                    intent.putExtra("DEVICENAME", myDevices.elementAt(itemPosition-1));
+                    intent.putExtra("DEVICENAME", adapter.getItem(itemPosition));
                 else
                     intent.putExtra("DEVICENAME", "All");
 
@@ -235,6 +251,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
     void collectDeviceData(String addedDevice)
     {
+        final int addedPosition = myDataHelper.addDevice(addedDevice);
 
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         final String deviceID = myPref.getString("deviceID", "No device");
@@ -255,6 +272,7 @@ public class MyAccountActivity extends AppCompatActivity {
                 if(!(dataSnapshot.getKey().toString().equals("status")))
                 {
                     myDatabase.addData(deviceName, Long.parseLong(dataSnapshot.getKey().toString()), Double.parseDouble(dataSnapshot.getValue().toString()), getApplication());
+                    myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
                 }
                 else if(dataSnapshot.getKey().toString().equals("status"))
                 {
@@ -263,8 +281,6 @@ public class MyAccountActivity extends AppCompatActivity {
                     if(dataSnapshot.getValue().toString().equals("connected"))
                         Toast.makeText(getApplicationContext(),deviceName + " is " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
                 }
-                //Toast.makeText(getApplicationContext(),"In device child added: " + deviceName + " added key " + dataSnapshot.getKey().toString(), Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(),"In device child added: " + deviceName + " added value " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -279,26 +295,44 @@ public class MyAccountActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot)
-            {
-            }
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s)
-            {
-            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
             @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
+    }
+
+    void setDataText()
+    {
+        DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
+        Vector<Double> allData = myDatabase.getAllData();
+        Vector<String> allDevice = myDatabase.getAllDevice();
+        Vector<Double> deviceData = new Vector<Double>();
+
+        String dataString = "";
+
+        for(int i = 0; i < allDevice.size(); i++)
+        {
+            deviceData.add(myDatabase.getSpecificDataTotal(allDevice.elementAt(i)));
+            dataString = dataString + Double.toString(deviceData.elementAt(i)) + " ";
+        }
+
+        double total = 0;
+
+        for(int i = 0; i < allData.size(); i++)
+            total += allData.elementAt(i);
+
+        dataString = dataString + Double.toString(total);
+
+        statsField.setText(dataString);
     }
 
     void refresh()
     {
-        startActivity(new Intent(MyAccountActivity.this, MyAccountActivity.class));
-        Toast.makeText(getApplicationContext(), "Refreshing", Toast.LENGTH_LONG).show();
+        setDataText();
     }
 
 
