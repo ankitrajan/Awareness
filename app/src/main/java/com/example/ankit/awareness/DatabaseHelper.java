@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Vector;
@@ -119,6 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void addDevice(String deviceName, String status)
     {
+        Log.d("MyAccountActivity", "Adding device in database");
         String countQuery = "SELECT deviceID FROM " + TABLE_DEVICE;
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -144,6 +146,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert(TABLE_DEVICE, null, values);
         db.close();
+
+        Log.d("MyAccountActivity", "Device added");
     }
 
     public Vector<Long> getAllStamp()
@@ -215,6 +219,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return specifiedData;
     }
 
+    public double getSpecificDataTotal(String queryDevice)
+    {
+        Vector<Double>  specifiedData = new Vector<Double>();
+        String selectQuery = "SELECT value FROM " + TABLE_DATA + " WHERE name = \"" + queryDevice + "\" ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            int myPosition = 0;
+
+            do
+            {
+                specifiedData.add(myPosition++, cursor.getDouble(0));
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        double total = 0;
+
+        for(int i = 0; i < specifiedData.size(); i++)
+            total += specifiedData.elementAt(i);
+
+        return total;
+    }
+
     public Vector<String> getAllDevice()
     {
         Vector<String>  allDevice = new Vector<String>();
@@ -234,6 +266,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         db.close();
+
+        Log.d("MyAccountActivity", "Returned vector size = " + allDevice.size());
 
         return allDevice;
     }
@@ -265,7 +299,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Vector<Double> getAllData()
     {
         Vector<Double>  allData = new Vector<Double>();
-        String selectQuery = "SELECT input FROM " + TABLE_DATA + " ";
+        String selectQuery = "SELECT value FROM " + TABLE_DATA + " ";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -311,20 +345,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
-
-
-
-    /*
-    // Getting single contact
-    public Contact getContact(int id) {}
-
-    // Getting contacts Count
-    public int getContactsCount() {}
-
-    // Updating single contact
-    public int updateContact(Contact contact) {}
-
-    // Deleting single contact
-    public void deleteContact(Contact contact) {}
-    */
 }
