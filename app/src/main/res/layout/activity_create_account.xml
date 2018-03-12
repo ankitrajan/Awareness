@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/CreateNewAccount"
-        android:layout_width="80dp"
+        android:layout_width="200dp"
         android:layout_height="30dp"
         android:layout_marginBottom="172dp"
         android:layout_marginLeft="8dp"
@@ -24,17 +24,18 @@
 
     <EditText
         android:id="@+id/EmailField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="144dp"
         android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM@-_."
         android:ems="10"
         android:hint="Email"
-        android:textColorHint="#FFFFFF"
         android:inputType="textEmailAddress"
         android:maxLength="30"
+        android:textColor="@android:color/white"
+        android:textColorHint="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -43,8 +44,8 @@
 
     <EditText
         android:id="@+id/PasswordField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -52,9 +53,10 @@
         android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
         android:ems="10"
         android:hint="Password"
-        android:textColorHint="#FFFFFF"
         android:inputType="textPassword"
         android:maxLength="15"
+        android:textColor="@android:color/white"
+        android:textColorHint="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/CreateNewAccount"
         app:layout_constraintHorizontal_bias="0.502"

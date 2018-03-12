@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -125,6 +126,9 @@ public class CreateAccountActivity extends AppCompatActivity
                                             }
                                             else
                                             {
+                                               // emailText.setError("Email could not be verified");
+                                              //  View view = findViewById(android.R.id.content);
+                                               // Snackbar.make(view, "Deleted...", Snackbar.LENGTH_LONG).show();
                                                 Toast.makeText(CreateAccountActivity.this, "Email could not be verified", Toast.LENGTH_LONG).show();
                                                 finish();
                                             }
@@ -136,6 +140,9 @@ public class CreateAccountActivity extends AppCompatActivity
                     });
         }
         else
+           // emailText.setError("Email cannot be empty");
+           // passwordText.setError("Password cannot be empty");
+
             Toast.makeText(CreateAccountActivity.this, "Field(s) cannot be left empty", Toast.LENGTH_LONG).show();
     }
 }

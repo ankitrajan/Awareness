@@ -7,7 +7,7 @@
         android:hardwareAccelerated="false"
         android:largeHeap="true"
         android:icon="@mipmap/ic_awareness"
-        android:label=""
+        android:label="Awareness"
         android:roundIcon="@mipmap/ic_awareness"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -19,10 +19,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateAccountActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MyAccountActivity" />
+        <activity android:name=".MyAccountActivity" android:label=""/>
         <activity
             android:name=".AnalysisActivity"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true" android:label="">
         </activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar">
