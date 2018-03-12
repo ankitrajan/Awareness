@@ -280,7 +280,7 @@ public class MyAccountActivity extends AppCompatActivity {
         data.setValueTextSize(10f);
         data.setValueTextColor(Color.WHITE);
 
-
+        pieChart.getLegend().setTextColor(Color.WHITE); //In case of error delete, changes font to white
         pieChart.setData(data);
     }
 
