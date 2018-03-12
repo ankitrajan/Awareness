@@ -70,7 +70,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.TRANSPARENT);
-        pieChart.setTransparentCircleRadius(55f);
+        pieChart.setTransparentCircleRadius(85f);
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -281,7 +281,12 @@ public class MyAccountActivity extends AppCompatActivity {
         data.setValueTextColor(Color.WHITE);
 
         pieChart.getLegend().setTextColor(Color.WHITE); //In case of error delete, changes font to white
+        pieChart.setHoleRadius(80);                    //In case of error delete, changing the chart radius
+        pieChart.setDrawEntryLabels(false);            //showing description under the percentage for piechart
+
+
         pieChart.setData(data);
+
     }
 
     void refresh()

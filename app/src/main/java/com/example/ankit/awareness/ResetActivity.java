@@ -52,7 +52,8 @@ public class ResetActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task)
                 {
                     if (!(task.isSuccessful()))
-                        Toast.makeText(ResetActivity.this, "Email not linked to any account", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(ResetActivity.this, "Email not linked to any account", Toast.LENGTH_LONG).show();
+                        resetEmailText.setError("Email not linked to an account");
                     else
                     {
                         Toast.makeText(ResetActivity.this, "Email sent", Toast.LENGTH_SHORT).show();
@@ -62,6 +63,7 @@ public class ResetActivity extends AppCompatActivity {
                 }
             });
         } else
-            Toast.makeText(this, "Email field(s) is empty", Toast.LENGTH_SHORT).show();
+            resetEmailText.setError("Email cannot be empty");
+           // Toast.makeText(this, "Email field(s) is empty", Toast.LENGTH_SHORT).show();
     }
 }
