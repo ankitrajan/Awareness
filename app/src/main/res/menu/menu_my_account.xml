@@ -2,16 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/sign_out"
-        android:title="Sign Out"
-        app:showAsAction="never"/>
+    <item
+        android:id="@+id/sign_out"
+        android:title="Sign Out" />
 
     <item android:id="@+id/settings"
         android:title="Settings"
         app:showAsAction="never"/>
 
-    <item android:id="@+id/refresh"
+    <item
+        android:id="@+id/refresh"
+        android:icon="@android:drawable/stat_notify_sync_noanim"
         android:title="Refresh"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always" />
 
 </menu>
