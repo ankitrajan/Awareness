@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateAccountActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MyAccountActivity" android:label=""/>
+        <activity android:name=".MyAccountActivity" android:theme="@style/account" android:label=""/>
         <activity
             android:name=".AnalysisActivity"
             android:hardwareAccelerated="true" android:label="">

@@ -9,8 +9,14 @@
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">#FFFF</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="account" parent="Theme.AppCompat.Light.DarkActionBar" >
+        <item name="colorPrimary">@color/primary_material_dark_1</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
 </resources>
