@@ -344,7 +344,7 @@ public class MyAccountActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_my_account, menu);
+        inflater.inflate(R.menu.menu_toolbar_my_account, menu);
         return true;
     }
 
@@ -352,14 +352,6 @@ public class MyAccountActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.sign_out:
-                signOut();
-                return true;
-
-            case R.id.settings:
-                startActivity(new Intent(MyAccountActivity.this, SettingsActivity.class));
-                return true;
-
             case R.id.refresh:
                 refresh();
                 return true;
