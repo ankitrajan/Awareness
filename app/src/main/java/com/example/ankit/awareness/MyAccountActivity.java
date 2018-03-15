@@ -120,9 +120,17 @@ public class MyAccountActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1);
 
-        adapter.add("All");
-
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        Boolean firstLogin = myPref.getBoolean("First Login", true);
+
+        Log.d(TAG, "First login value for adapter: " + firstLogin);
+
+        if(!firstLogin)
+            adapter.add("All");
+        else
+            adapter.add("No Connected Device");
+
+        //final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
         String userID = firebaseAuth.getCurrentUser().getUid();
 
@@ -130,17 +138,27 @@ public class MyAccountActivity extends AppCompatActivity {
 
         final DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
-        DatabaseReference deviceRef = databaseReference.child("Users").child(userID).child("Linked Device").getRef();
+        //DatabaseReference deviceRef = databaseReference.child("Users").child(userID).child("Linked Device").getRef();
+        DatabaseReference deviceRef = databaseReference.child("Users").child(userID).getRef();
 
         deviceRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                SharedPreferences.Editor editor = myPref.edit();
-                editor.putString("deviceID", dataSnapshot.getValue().toString());
-                editor.apply();
+                if (dataSnapshot.hasChild("Linked Device")) {
+                    SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = myPref.edit();
+                    editor.putString("deviceID", dataSnapshot.child("Linked Device").getValue().toString());
+                    editor.apply();
+                }
+                else
+                {
+                    SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = myPref.edit();
+                    editor.putString("deviceID", "No device");
+                    editor.apply();
+                }
             }
 
             @Override
@@ -188,9 +206,17 @@ public class MyAccountActivity extends AppCompatActivity {
 
         final Vector<String> myDevices = myDatabase.getAllDevice();
 
-        String myStrings[] = new String[myDevices.size()+1];
+        final String myStrings[] = new String[myDevices.size()+1];
 
-        myStrings[0] = "All";
+        SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        Boolean firstLogin = myPref.getBoolean("First Login", true);
+
+        Log.d(TAG, "First login value for adapter: " + firstLogin);
+
+        if(!firstLogin)
+            myStrings[0] = "All";
+        else
+            myStrings[0] = "No Connected Device";
 
         for(int j = 1; j < myDevices.size()+1; j++)
         {
@@ -215,11 +241,15 @@ public class MyAccountActivity extends AppCompatActivity {
 
                 Intent intent= new Intent(MyAccountActivity.this, AnalysisActivity.class);
                 if(itemPosition != 0)
+                {
                     intent.putExtra("DEVICENAME", adapter.getItem(itemPosition));
-                else
+                    startActivity(intent);
+                }
+                else if (myStrings[0].equals("All"))
+                {
                     intent.putExtra("DEVICENAME", "All");
-
-                startActivity(intent);
+                    startActivity(intent);
+                }
             }
 
         });

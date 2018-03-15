@@ -105,6 +105,7 @@ public class CreateAccountActivity extends AppCompatActivity
 
                                                 SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                                                 SharedPreferences.Editor editor = myPref.edit();
+                                                editor.putString("deviceID", "No device");
                                                 editor.putString("UserID", newUser);
                                                 editor.putBoolean("First Login", true);
                                                 editor.apply();

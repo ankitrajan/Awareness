@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
 
                         final String currentUser = firebaseAuth.getCurrentUser().getUid().toString();
 
-                        DatabaseReference userHasDeviceRef = databaseReference.child("Users").child(currentUser).getRef();
+                        final DatabaseReference userHasDeviceRef = databaseReference.child("Users").child(currentUser).getRef();
 
                         userHasDeviceRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -104,17 +104,24 @@ public class MainActivity extends AppCompatActivity
                                     editor.putString("UserID", currentUser);
                                     editor.putBoolean("First Login", false);
                                     editor.apply();
+
+                                    userHasDeviceRef.child("First Login").setValue(false);
+
                                     goToMyAccountActivity();
                                 }
                                 else
                                 {
                                     SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                                     SharedPreferences.Editor editor = myPref.edit();
+                                    editor.putString("deviceID", "No device");
                                     editor.putString("UserID", currentUser);
                                     editor.putBoolean("First Login", true);
                                     editor.apply();
-                                    //goToMyAccountActivity();
-                                    goToAddDeviceActivity();
+
+                                    userHasDeviceRef.child("First Login").setValue(true);
+
+                                    goToMyAccountActivity();
+                                    //goToAddDeviceActivity();
                                 }
                             }
 
