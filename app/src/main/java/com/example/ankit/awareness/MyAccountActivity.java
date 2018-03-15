@@ -89,8 +89,8 @@ public class MyAccountActivity extends AppCompatActivity {
                         startActivity(new Intent(MyAccountActivity.this, SettingsActivity.class));
                         return true;
 
-                    case R.id.refresh:
-                        refresh();
+                    case R.id.configure_device:
+                        goToAddDeviceActivity();
                         return true;
 
                     default:
@@ -325,6 +325,12 @@ public class MyAccountActivity extends AppCompatActivity {
 
         pieChart.setData(data);
 
+    }
+
+    void goToAddDeviceActivity()
+    {
+        Intent intent = new Intent(MyAccountActivity.this, AddDeviceActivity.class);
+        startActivity(intent);
     }
 
     void refresh()

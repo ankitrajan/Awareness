@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,12 +23,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 public class AddDeviceActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
 
     private Button linkButton;
+
+    private TextView currentDevice;
 
     private EditText deviceText;
     private EditText devicePasswordText;
@@ -45,8 +50,32 @@ public class AddDeviceActivity extends AppCompatActivity {
 
         linkButton = (Button) findViewById(R.id.LinkDevice);
 
+        currentDevice = (TextView) findViewById(R.id.CurrentDevice);
+
         deviceText = (EditText) findViewById(R.id.DeviceField);
         devicePasswordText = (EditText) findViewById(R.id.DevicePasswordField);
+
+        final String currentUser = firebaseAuth.getCurrentUser().getUid().toString();
+
+        DatabaseReference userHasDeviceRef = databaseReference.child("Users").child(currentUser).getRef();
+
+        userHasDeviceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("Linked Device")) {
+                    currentDevice.setText("Currently linked device: " + dataSnapshot.child("Linked Device").getValue().toString());
+                }
+                else
+                {
+                    currentDevice.setText("No device currently linked");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         currentUserID = firebaseAuth.getCurrentUser().getUid().toString();
 
