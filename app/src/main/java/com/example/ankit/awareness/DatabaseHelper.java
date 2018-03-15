@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Database Name
     private static final String DATABASE_NAME = "Data Manager";
@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_DATA = "data";
     private static final String TABLE_DEVICE = "device";
 
-    private static final int DATABASE_SIZE = 32;
+    private static final int DATABASE_SIZE = 200;
 
     //private static int currentSize = 0;
 

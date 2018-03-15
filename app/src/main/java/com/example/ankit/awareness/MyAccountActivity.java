@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +46,9 @@ public class MyAccountActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
 
+    private DrawerLayout accountDrawer;
+    private NavigationView navMyAccount;
+
     private ArrayAdapter<String> adapter;
     private ListView deviceList;
 
@@ -58,8 +64,40 @@ public class MyAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setContentView(R.layout.activity_my_account);
+
+        accountDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        navMyAccount = (NavigationView) findViewById(R.id.NavMyAccount);
+
+        navMyAccount.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                item.setChecked(true);
+                accountDrawer.closeDrawers();
+                item.setChecked(false);
+
+                switch (item.getItemId())
+                {
+                    case R.id.sign_out:
+                        signOut();
+                        return true;
+
+                    case R.id.settings:
+                        startActivity(new Intent(MyAccountActivity.this, SettingsActivity.class));
+                        return true;
+
+                    case R.id.refresh:
+                        refresh();
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
 
         pieChart = (PieChart) findViewById(R.id.piechart);
         pieChart.setUsePercentValues(true);
