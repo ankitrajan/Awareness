@@ -64,10 +64,12 @@ public class AddDeviceActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("Linked Device")) {
                     currentDevice.setText("Currently linked device: " + dataSnapshot.child("Linked Device").getValue().toString());
+                    linkButton.setText("Change Device");
                 }
                 else
                 {
                     currentDevice.setText("No device currently linked");
+                    linkButton.setText("Link Device");
                 }
             }
 
@@ -136,6 +138,7 @@ public class AddDeviceActivity extends AppCompatActivity {
     {
         SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
+        String previousDevice = myPref.getString("deviceID", "No device");
 
         SharedPreferences.Editor editor = myPref.edit();
         editor.putString("deviceID", deviceIdentification);
@@ -146,6 +149,9 @@ public class AddDeviceActivity extends AppCompatActivity {
         {
             DatabaseReference linkRef = databaseReference.child("Devices").child(deviceIdentification).child("linked");
             linkRef.setValue(1);
+
+            if (!previousDevice.equals("none"))
+                databaseReference.child("Devices").child(previousDevice).child("linked").setValue(0);
 
             databaseReference.child("Users").child(currentUserID).child("First Login").setValue(false);
             databaseReference.child("Users").child(currentUserID).child("Linked Device").setValue(deviceIdentification);
