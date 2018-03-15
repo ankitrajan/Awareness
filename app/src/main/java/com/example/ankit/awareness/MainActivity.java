@@ -75,11 +75,7 @@ public class MainActivity extends AppCompatActivity
         myDatabase.deleteAllData();
         myDatabase.deleteAllDevice();
 
-        Log.d(TAG, "Works till before signOut()");
-
         firebaseAuth.signOut();
-
-        Log.d(TAG, "Works till after signOut()");
 
         authListener = new FirebaseAuth.AuthStateListener()
         {
@@ -117,7 +113,7 @@ public class MainActivity extends AppCompatActivity
                                     editor.putString("UserID", currentUser);
                                     editor.putBoolean("First Login", true);
                                     editor.apply();
-                                    goToMyAccountActivity();
+                                    //goToMyAccountActivity();
                                     goToAddDeviceActivity();
                                 }
                             }

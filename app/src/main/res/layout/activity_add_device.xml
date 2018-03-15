@@ -77,4 +77,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/deviceid" />
 
+    <TextView
+        android:id="@+id/CurrentDevice"
+        android:layout_width="116dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
 </android.support.constraint.ConstraintLayout>
