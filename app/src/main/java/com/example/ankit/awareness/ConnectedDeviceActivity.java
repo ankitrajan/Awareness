@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connected_device);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         connectedDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_connected);
 
@@ -240,12 +242,18 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
                 if(itemPosition != 0)
                 {
                     intent.putExtra("DEVICENAME", adapterConnected.getItem(itemPosition));
-                    startActivity(intent);
+
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ConnectedDeviceActivity.this, findViewById(R.id.DeviceListConnected), "graphedDevice");
+
+                    startActivity(intent, optionsCompat.toBundle());
                 }
                 else if (myStrings[0].equals("All"))
                 {
                     intent.putExtra("DEVICENAME", "All");
-                    startActivity(intent);
+
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ConnectedDeviceActivity.this, findViewById(R.id.DeviceListConnected), "graphedDevice");
+
+                    startActivity(intent, optionsCompat.toBundle());
                 }
             }
 
@@ -298,7 +306,6 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
                     else
                         adapterConnected.add(deviceName);
                 }
-
             }
 
             @Override
