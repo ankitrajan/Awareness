@@ -119,7 +119,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                                 verifyState(device);
                             }
                             else
-                                Toast.makeText(getApplicationContext(),"Device already linked with another account", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Device already linked with an account", Toast.LENGTH_LONG).show();
                         }
                         else
                             Toast.makeText(getApplicationContext(),"Incorrect device password", Toast.LENGTH_LONG).show();

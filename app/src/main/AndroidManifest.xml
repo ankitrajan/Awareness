@@ -5,35 +5,47 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-        android:largeHeap="true"
         android:icon="@mipmap/ic_awareness"
         android:label="Awareness"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_awareness"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LogoActivity" android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".LogoActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateAccountActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MyAccountActivity" android:theme="@style/account" android:label=""/>
+        <activity
+            android:name=".CreateAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MyAccountActivity"
+            android:label=""
+            android:theme="@style/account" />
         <activity
             android:name=".AnalysisActivity"
-            android:hardwareAccelerated="true" android:label="">
-        </activity>
+            android:hardwareAccelerated="true"
+            android:label=""></activity>
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ankit.awareness.MainActivity" />
         </activity>
-        <activity android:name=".ResetActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".AddDeviceActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ResetActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddDeviceActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ConnectedDeviceActivity"></activity>
     </application>
 
-
 </manifest>
-
