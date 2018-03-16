@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +45,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
     private DrawerLayout connectedDrawer;
     private NavigationView navConnected;
 
+    private Toolbar mToolbar;
+
+
     private ArrayAdapter<String> adapterConnected;
     private ListView deviceListConnected;
 
@@ -57,11 +61,14 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connected_device);
-        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+       // overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+        mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        setSupportActionBar(mToolbar);
 
         connectedDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_connected);
 
         navConnected = (NavigationView) findViewById(R.id.NavConnected);
+
 
         navConnected.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -340,7 +347,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
         for(int i = 0; i < allConnectedData.size(); i++)
             total += allConnectedData.elementAt(i);
 
-        pieChartConnected.animateY(2500, Easing.EasingOption.EaseInOutCubic);
+        pieChartConnected.animateY(0, Easing.EasingOption.EaseInOutCubic); ////////////////////////////////////////////////
 
         PieDataSet dataSet = new PieDataSet(yValues,"Appliances");
         dataSet.setSliceSpace(3f);
