@@ -54,7 +54,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:itemTextColor="@android:color/black"
-        app:menu="@menu/menu_my_account">
+        app:menu="@menu/menu_my_account"
+        app:headerLayout="@layout/nav_header">
 
     </android.support.design.widget.NavigationView>
 
