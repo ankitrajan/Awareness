@@ -13,7 +13,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="account" parent="Theme.AppCompat.Light.DarkActionBar" >
+    <style name="account" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="colorPrimary">@color/primary_material_dark_1</item>
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>

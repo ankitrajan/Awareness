@@ -30,7 +30,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <include layout="@layout/nav_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechart"
@@ -45,12 +49,13 @@
     <android.support.design.widget.NavigationView
         android:id="@+id/NavMyAccount"
         android:layout_width="wrap_content"
-
+        app:itemIconTint="#000C1F"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:itemTextColor="@android:color/black"
-        app:menu="@menu/menu_my_account">
+        app:menu="@menu/menu_my_account"
+        app:headerLayout="@layout/nav_header">
 
     </android.support.design.widget.NavigationView>
 

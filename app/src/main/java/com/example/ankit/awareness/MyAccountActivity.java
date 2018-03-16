@@ -49,6 +49,8 @@ public class MyAccountActivity extends AppCompatActivity {
     private DrawerLayout accountDrawer;
     private NavigationView navMyAccount;
 
+    private Toolbar mToolbar;
+
     private ArrayAdapter<String> adapter;
     private ListView deviceList;
 
@@ -66,6 +68,9 @@ public class MyAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setContentView(R.layout.activity_my_account);
+
+        mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        setSupportActionBar(mToolbar);
 
         accountDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -351,7 +356,7 @@ public class MyAccountActivity extends AppCompatActivity {
         pieChart.getLegend().setTextColor(Color.WHITE); //In case of error delete, changes font to white
         pieChart.setHoleRadius(80);                    //In case of error delete, changing the chart radius
         pieChart.setDrawEntryLabels(false);            //showing description under the percentage for piechart
-
+        dataSet.setDrawValues(false);                  //not showing any values in the piechart
 
         pieChart.setData(data);
 
