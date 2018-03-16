@@ -8,8 +8,6 @@
     tools:context="com.example.ankit.awareness.MainActivity">
 
 
-
-
     <Button
         android:id="@+id/Login"
         android:layout_width="200dp"
@@ -32,21 +30,21 @@
         android:id="@+id/EmailField"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="36dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="100dp"
-        android:background="@null"
+        android:layout_marginTop="176dp"
+        android:background="@drawable/custom_edittext"
         android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM@-_."
+        android:drawableLeft="@drawable/email_edittext"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:maxLength="30"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textColorHint="#FFFFFF"
         android:textSize="14sp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/PasswordField"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -55,24 +53,24 @@
         android:id="@+id/PasswordField"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="60dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@null"
+        android:background="@drawable/custom_edittext"
         android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+        android:drawableLeft="@drawable/password_edittext"
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="Password"
         android:inputType="textPassword"
         android:maxLength="15"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textColorHint="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/ResetPassword"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EmailField" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/ResetPassword"
@@ -92,35 +90,6 @@
         app:layout_constraintHorizontal_bias="0.799"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="23dp"
-        android:layout_height="22dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/EmailField"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.194"
-        app:srcCompat="@drawable/email" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="23dp"
-        android:layout_height="22dp"
-        android:layout_marginBottom="357dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="55dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/PasswordField"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:srcCompat="@drawable/lock" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -148,7 +117,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_end="547dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline5"

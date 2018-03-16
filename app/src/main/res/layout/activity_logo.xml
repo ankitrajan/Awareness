@@ -11,7 +11,7 @@
         android:id="@+id/Main"
         android:layout_width="200dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="140dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/button_selector"
@@ -21,7 +21,7 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
 
