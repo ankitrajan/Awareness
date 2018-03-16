@@ -107,7 +107,8 @@ public class MainActivity extends AppCompatActivity
 
                                     userHasDeviceRef.child("First Login").setValue(false);
 
-                                    goToMyAccountActivity();
+                                    goToConnectedDeviceActivity();
+                                    //goToMyAccountActivity();
                                 }
                                 else
                                 {
@@ -120,7 +121,8 @@ public class MainActivity extends AppCompatActivity
 
                                     userHasDeviceRef.child("First Login").setValue(true);
 
-                                    goToMyAccountActivity();
+                                    goToConnectedDeviceActivity();
+                                    //goToMyAccountActivity();
                                     //goToAddDeviceActivity();
                                 }
                             }
@@ -227,6 +229,12 @@ public class MainActivity extends AppCompatActivity
     void goToMyAccountActivity()
     {
         Intent intent = new Intent(MainActivity.this, MyAccountActivity.class);
+        startActivity(intent);
+    }
+
+    void goToConnectedDeviceActivity()
+    {
+        Intent intent = new Intent(MainActivity.this, ConnectedDeviceActivity.class);
         startActivity(intent);
     }
 

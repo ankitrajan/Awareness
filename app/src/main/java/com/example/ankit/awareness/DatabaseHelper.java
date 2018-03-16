@@ -272,6 +272,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return allDevice;
     }
 
+    public Vector<String> getAllStatusDevice(String queryStatus)
+    {
+        Vector<String>  allStatusDevice = new Vector<String>();
+        String selectQuery = "SELECT deviceID FROM " + TABLE_DEVICE + " WHERE status = \"" + queryStatus + "\" ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            int myPosition = 0;
+
+            do
+            {
+                allStatusDevice.add(myPosition++, cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        Log.d("MyAccountActivity", "Returned vector size of " + queryStatus + " devices = " + allStatusDevice.size());
+
+        return allStatusDevice;
+    }
+
     public Vector<String> getAllAppliance()
     {
         Vector<String>  allAppliance = new Vector<String>();
@@ -300,6 +325,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         Vector<Double>  allData = new Vector<Double>();
         String selectQuery = "SELECT value FROM " + TABLE_DATA + " ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            int myPosition = 0;
+
+            do
+            {
+                allData.add(myPosition++, cursor.getDouble(0));
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        return allData;
+    }
+
+    public Vector<Double> getAllStatusData(String queryStatus)
+    {
+        Vector<Double>  allData = new Vector<Double>();
+        String selectQuery = "SELECT name FROM " + TABLE_DATA + " a INNER JOIN " + TABLE_DEVICE + " b ON a.name=b.deviceID WHERE b.status=\"" + queryStatus + "\" ";
+        //String selectQuery = "SELECT deviceID FROM " + TABLE_DEVICE + " WHERE status = \"" + queryStatus + "\" ";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
