@@ -40,7 +40,7 @@ public class AnalysisActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
 
         barChart = (BarChart) findViewById(R.id.barchart);
 
