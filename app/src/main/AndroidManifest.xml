@@ -26,7 +26,12 @@
         <activity
             android:name=".MyAccountActivity"
             android:label=""
-            android:theme="@style/account" />
+            android:theme="@style/account" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ankit.awareness.ConnectedDeviceActivity" />
+
+        </activity>
         <activity
             android:name=".AnalysisActivity"
             android:hardwareAccelerated="true"
