@@ -1,5 +1,6 @@
 package com.example.ankit.awareness;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -7,14 +8,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,7 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class ConnectedDeviceActivity extends AppCompatActivity {
+public class ConnectedDeviceActivity extends AppCompatActivity{
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -47,7 +51,6 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-
     private ArrayAdapter<String> adapterConnected;
     private ListView deviceListConnected;
 
@@ -56,19 +59,29 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
     private static final String TAG = "ConnectedDeviceActivity";
 
     PieChart pieChartConnected;
+    private GestureDetectorCompat detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connected_device);
-       // overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+        if( getIntent().getExtras() != null)
+        {
+            if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("ConnectedDeviceActivity"))
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+            else
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+        else
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
 
         connectedDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_connected);
 
         navConnected = (NavigationView) findViewById(R.id.NavConnected);
-
 
         navConnected.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -84,6 +97,16 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
                         signOut();
                         return true;
 
+                    case R.id.daily_consumption:
+                        Intent intent = new Intent(ConnectedDeviceActivity.this, ConnectedDeviceActivity.class);
+                        intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
+                        startActivity(intent);
+                        return true;
+
+                    case R.id.monthly_consumption:
+                        goToMyAccountActivity();
+                        return true;
+
                     case R.id.settings:
                         startActivity(new Intent(ConnectedDeviceActivity.this, SettingsActivity.class));
                         return true;
@@ -97,8 +120,6 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
                 }
             }
         });
-
-
 
         pieChartConnected = (PieChart) findViewById(R.id.piechartConnected);
         pieChartConnected.setUsePercentValues(true);
@@ -249,18 +270,20 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
                 if(itemPosition != 0)
                 {
                     intent.putExtra("DEVICENAME", adapterConnected.getItem(itemPosition));
+                    intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
+                    startActivity(intent);
+                    //ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ConnectedDeviceActivity.this, findViewById(R.id.DeviceListConnected), "graphedDevice");
 
-                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ConnectedDeviceActivity.this, findViewById(R.id.DeviceListConnected), "graphedDevice");
-
-                    startActivity(intent, optionsCompat.toBundle());
+                    //startActivity(intent, optionsCompat.toBundle());
                 }
                 else if (myStrings[0].equals("All"))
                 {
                     intent.putExtra("DEVICENAME", "All");
+                    intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
+                    startActivity(intent);
+                    //ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ConnectedDeviceActivity.this, findViewById(R.id.DeviceListConnected), "graphedDevice");
 
-                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ConnectedDeviceActivity.this, findViewById(R.id.DeviceListConnected), "graphedDevice");
-
-                    startActivity(intent, optionsCompat.toBundle());
+                    //startActivity(intent, optionsCompat.toBundle());
                 }
             }
 
@@ -369,6 +392,19 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
     void goToAddDeviceActivity()
     {
         Intent intent = new Intent(ConnectedDeviceActivity.this, AddDeviceActivity.class);
+        startActivity(intent);
+}
+
+    void goToConnectedDeviceActivity()
+    {
+        Intent intent = new Intent(ConnectedDeviceActivity.this, ConnectedDeviceActivity.class);
+        startActivity(intent);
+    }
+
+    void goToMyAccountActivity()
+    {
+        Intent intent = new Intent(ConnectedDeviceActivity.this, MyAccountActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
         startActivity(intent);
     }
 

@@ -9,6 +9,14 @@
         />
 
     <item
+        android:id="@+id/daily_consumption"
+        android:title="Daily Consumption" />
+
+    <item
+        android:id="@+id/monthly_consumption"
+        android:title="Monthly Consumption" />
+
+    <item
         android:id="@+id/settings"
         android:title="Settings"
         android:icon="@mipmap/settings"

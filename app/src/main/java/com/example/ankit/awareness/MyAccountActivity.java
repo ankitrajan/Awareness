@@ -69,8 +69,16 @@ public class MyAccountActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setContentView(R.layout.activity_my_account);
 
+
+        if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("ConnectedDeviceActivity"))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        else
+            overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         accountDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -88,6 +96,16 @@ public class MyAccountActivity extends AppCompatActivity {
                 {
                     case R.id.sign_out:
                         signOut();
+                        return true;
+
+                    case R.id.daily_consumption:
+                        goToConnectedDeviceActivity();
+                        return true;
+
+                    case R.id.monthly_consumption:
+                        Intent intent = new Intent(MyAccountActivity.this, MyAccountActivity.class);
+                        intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
+                        startActivity(intent);
                         return true;
 
                     case R.id.settings:
@@ -248,11 +266,13 @@ public class MyAccountActivity extends AppCompatActivity {
                 if(itemPosition != 0)
                 {
                     intent.putExtra("DEVICENAME", adapter.getItem(itemPosition));
+                    intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
                     startActivity(intent);
                 }
                 else if (myStrings[0].equals("All"))
                 {
                     intent.putExtra("DEVICENAME", "All");
+                    intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
                     startActivity(intent);
                 }
             }
@@ -368,6 +388,18 @@ public class MyAccountActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    void goToConnectedDeviceActivity()
+    {
+        Intent intent = new Intent(MyAccountActivity.this, ConnectedDeviceActivity.class);
+        startActivity(intent);
+    }
+
+    void goToMyAccountActivity()
+    {
+        Intent intent = new Intent(MyAccountActivity.this, MyAccountActivity.class);
+        startActivity(intent);
+    }
+
     void refresh()
     {
         setDataText();
@@ -379,7 +411,6 @@ public class MyAccountActivity extends AppCompatActivity {
         startActivity(new Intent(MyAccountActivity.this, MainActivity.class));
         Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity
     void goToConnectedDeviceActivity()
     {
         Intent intent = new Intent(MainActivity.this, ConnectedDeviceActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "MainActivity");
         startActivity(intent);
     }
 

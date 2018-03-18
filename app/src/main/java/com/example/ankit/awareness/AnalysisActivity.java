@@ -1,10 +1,16 @@
 package com.example.ankit.awareness;
 
 import android.content.Intent;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,24 +31,37 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
-public class AnalysisActivity extends AppCompatActivity {
+public class AnalysisActivity extends AppCompatActivity  implements GestureDetector.OnGestureListener{
 
     private GraphView deviceGraph;
+
+    //private Toolbar mToolbar;
 
     private TextView applianceName;
 
     private Button refreshGraphButton;
 
     private BarChart barChart;
+    private GestureDetectorCompat detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+        //overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+
+        if(getIntent().getExtras().getString("REFRESH") != null)
+            overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+        else
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+        //mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        //setSupportActionBar(mToolbar);
 
         barChart = (BarChart) findViewById(R.id.barchart);
+
+        detector = new GestureDetectorCompat(this, this);
 
         barChart.setDrawBarShadow(false);
         barChart.setDrawValueAboveBar(true);
@@ -169,8 +188,85 @@ public class AnalysisActivity extends AppCompatActivity {
     {
         Intent newIntent= new Intent(AnalysisActivity.this, AnalysisActivity.class);
         newIntent.putExtra("DEVICENAME", getIntent().getExtras().getString("DEVICENAME"));
+        newIntent.putExtra("STARTINGACTIVITY", getIntent().getExtras().getString("STARTINGACTIVITY"));
+        newIntent.putExtra("REFRESH", "Yes");
         startActivity(newIntent);
 
         Toast.makeText(getApplicationContext(), "Refreshing", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+        if(e2.getX() > e1.getX()) {
+            String callingActivity = getIntent().getExtras().getString("STARTINGACTIVITY");
+
+            if(callingActivity.equals("ConnectedDeviceActivity"))
+            {
+                Intent intent = new Intent(AnalysisActivity.this, ConnectedDeviceActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            else
+            {
+                Intent intent = new Intent(AnalysisActivity.this, MyAccountActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        detector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_toolbar_my_account, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.refresh:
+                refreshGraph();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
