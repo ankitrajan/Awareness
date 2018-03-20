@@ -51,12 +51,16 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddDeviceActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ConnectedDeviceActivity"
             android:label=""
             android:theme="@style/account" />
-        <activity android:name=".LiveActivity"></activity>
+        <activity android:name=".LiveActivity"
+            android:label=""
+            android:theme="@style/account"
+            ></activity>
     </application>
 
 </manifest>
