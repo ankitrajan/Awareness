@@ -19,6 +19,7 @@
         android:background="@drawable/button_selector"
         android:text="Login"
         android:textColor="#FFFFFF"
+        android:textColorLink="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -28,20 +29,19 @@
     <EditText
 
         android:id="@+id/EmailField"
+        style="@style/Widget.AppCompat.EditText"
         android:layout_width="250dp"
         android:layout_height="40dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="176dp"
-        android:background="@drawable/custom_edittext"
+        android:layout_marginTop="182dp"
         android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM@-_."
-        android:drawableLeft="@drawable/email_edittext"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:maxLength="30"
-        android:textColor="@android:color/black"
-        android:textColorHint="#FFFFFF"
+        android:textColor="@android:color/white"
+        android:textColorHint="#A9A9A9"
         android:textSize="14sp"
         android:visibility="visible"
         app:layout_constraintHorizontal_bias="0.496"
@@ -50,34 +50,37 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+
         android:id="@+id/PasswordField"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="42dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/custom_edittext"
+        android:autoLink="email"
         android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
-        android:drawableLeft="@drawable/password_edittext"
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="Password"
         android:inputType="textPassword"
         android:maxLength="15"
-        android:textColor="@android:color/black"
-        android:textColorHint="#FFFFFF"
+        android:textColor="@android:color/white"
+        android:textColorHint="#A9A9A9"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/ResetPassword"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EmailField"
+        app:layout_constraintVertical_bias="0.0" />
+
 
     <Button
         android:id="@+id/ResetPassword"
         style="@android:style/Widget.DeviceDefault.Button.Borderless"
         android:layout_width="110dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="280dp"
+        android:layout_marginBottom="332dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:elevation="0dp"
@@ -87,7 +90,7 @@
         android:textStyle="italic"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.799"
+        app:layout_constraintHorizontal_bias="0.743"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -126,6 +129,47 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="228dp"
+        app:layout_constraintEnd_toStartOf="@+id/EmailField"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/password" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="188dp"
+        app:layout_constraintEnd_toStartOf="@+id/EmailField"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mail" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="1dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="404dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="181dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/EmailField"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/line" />
 
 
 </android.support.constraint.ConstraintLayout>
