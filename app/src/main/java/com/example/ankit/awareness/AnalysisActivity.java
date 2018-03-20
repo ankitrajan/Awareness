@@ -1,6 +1,7 @@
 package com.example.ankit.awareness;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,6 +59,8 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         //mToolbar = (Toolbar) findViewById(R.id.nav_action);
         //setSupportActionBar(mToolbar);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         barChart = (BarChart) findViewById(R.id.barchart);
 

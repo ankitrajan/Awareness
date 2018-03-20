@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -29,9 +25,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,56 +36,50 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class MyAccountActivity extends AppCompatActivity {
+public class LiveActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
 
-    private DrawerLayout accountDrawer;
-    private NavigationView navMyAccount;
+    private DrawerLayout liveDrawer;
+    private NavigationView navConnected;
 
     private Toolbar mToolbar;
 
-    private ArrayAdapter<String> adapter;
-    private ListView deviceList;
+    private ArrayAdapter<String> adapterLive;
+    private ListView deviceListLive;
 
-    ////////private DataHelper myDataHelper;
+    private static final String TAG = "LiveActivity";
 
-    private static final String TAG = "MyAccountActivity";
-
-    private BottomNavigationView bottomNavigationView;
-
-    PieChart pieChart;
-
+    PieChart pieChartLive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setContentView(R.layout.activity_my_account);
+        setContentView(R.layout.activity_live);
 
-
-        if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("ConnectedDeviceActivity"))
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        if( getIntent().getExtras() != null)
+        {
+            if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("ConnectedDeviceActivity"))
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            else
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        }
         else
             overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
 
-        mToolbar = (Toolbar) findViewById(R.id.nav_action);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        accountDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        liveDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_live);
 
-        navMyAccount = (NavigationView) findViewById(R.id.NavMyAccount);
+        navConnected = (NavigationView) findViewById(R.id.NavConnected);
 
-        navMyAccount.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        navConnected.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 item.setChecked(true);
-                accountDrawer.closeDrawers();
+                liveDrawer.closeDrawers();
                 item.setChecked(false);
 
                 switch (item.getItemId())
@@ -101,17 +89,17 @@ public class MyAccountActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.daily_consumption:
-                        goToConnectedDeviceActivity();
-                        return true;
-
-                    case R.id.monthly_consumption:
-                        Intent intent = new Intent(MyAccountActivity.this, MyAccountActivity.class);
-                        intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
+                        Intent intent = new Intent(LiveActivity.this, ConnectedDeviceActivity.class);
+                        //intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
                         startActivity(intent);
                         return true;
 
+                    case R.id.monthly_consumption:
+                        goToMyAccountActivity();
+                        return true;
+
                     case R.id.settings:
-                        startActivity(new Intent(MyAccountActivity.this, SettingsActivity.class));
+                        startActivity(new Intent(LiveActivity.this, SettingsActivity.class));
                         return true;
 
                     case R.id.configure_device:
@@ -124,46 +112,36 @@ public class MyAccountActivity extends AppCompatActivity {
             }
         });
 
-        pieChart = (PieChart) findViewById(R.id.piechart);
-        pieChart.setUsePercentValues(true);
-        pieChart.getDescription().setEnabled(false);
-        //pieChart.setExtraOffsets(1,1,100,10);
+        pieChartLive = (PieChart) findViewById(R.id.piechartLive);
+        pieChartLive.setUsePercentValues(true);
+        pieChartLive.getDescription().setEnabled(false);
 
-        pieChart.setDragDecelerationFrictionCoef(0.99f);
+        pieChartLive.setDragDecelerationFrictionCoef(0.99f);
 
-        pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleColor(Color.TRANSPARENT);
-        pieChart.setTransparentCircleRadius(85f);
+        pieChartLive.setDrawHoleEnabled(true);
+        pieChartLive.setHoleColor(Color.TRANSPARENT);
+        pieChartLive.setTransparentCircleRadius(85f);
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        ///////myDataHelper = new DataHelper(getApplicationContext());
-
-        //////////myDataHelper.emptyData();
-
-        adapter = new ArrayAdapter<String>(this,
+        adapterLive = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1);
 
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
 
-        Log.d(TAG, "First login value for adapter: " + firstLogin);
-
         if(!firstLogin)
-            adapter.add("All");
+            adapterLive.add("All");
         else
-            adapter.add("No Connected Device");
-
-        //final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+            adapterLive.add("No Connected Device");
 
         String userID = firebaseAuth.getCurrentUser().getUid();
 
-        deviceList = (ListView) findViewById(R.id.DeviceList);
+        deviceListLive = (ListView) findViewById(R.id.DeviceListLive);
 
         final DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
-        //DatabaseReference deviceRef = databaseReference.child("Users").child(userID).child("Linked Device").getRef();
         DatabaseReference deviceRef = databaseReference.child("Users").child(userID).getRef();
 
         deviceRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -171,7 +149,8 @@ public class MyAccountActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild("Linked Device")) {
+                if (dataSnapshot.hasChild("Linked Device"))
+                {
                     SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                     SharedPreferences.Editor editor = myPref.edit();
                     editor.putString("deviceID", dataSnapshot.child("Linked Device").getValue().toString());
@@ -201,9 +180,12 @@ public class MyAccountActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
             {
-                myDatabase.addDevice(dataSnapshot.getKey().toString(), "connected");
+                //Log.d(TAG, "Device added: " + dataSnapshot.getKey().toString() + " with status " + dataSnapshot.child("status").getValue().toString());
+
+                myDatabase.addDevice(dataSnapshot.getKey().toString(), dataSnapshot.child("status").getValue().toString());
                 collectDeviceData(dataSnapshot.getKey().toString());
-                adapter.add(dataSnapshot.getKey().toString());
+                if(dataSnapshot.child("status").getValue().toString().equals("connected"))
+                    adapterLive.add(dataSnapshot.getKey().toString());
             }
 
             @Override
@@ -227,32 +209,36 @@ public class MyAccountActivity extends AppCompatActivity {
 
     void displayList()
     {
+        Log.d(TAG, "In displayList");
+
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
-        final Vector<String> myDevices = myDatabase.getAllDevice();
+        final Vector<String> myConnectedDevices = myDatabase.getAllStatusDevice("connected");
 
-        final String myStrings[] = new String[myDevices.size()+1];
+        Log.d(TAG, "Returned connectedDevice size is " + myConnectedDevices.size());
+
+        for (int i = 0; i < myConnectedDevices.size(); i++)
+            Log.d(TAG, "Device added: " + myConnectedDevices.elementAt(i));
+
+        final String myStrings[] = new String[myConnectedDevices.size()+1];
 
         SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
-
-        Log.d(TAG, "First login value for adapter: " + firstLogin);
 
         if(!firstLogin)
             myStrings[0] = "All";
         else
             myStrings[0] = "No Connected Device";
 
-        for(int j = 1; j < myDevices.size()+1; j++)
+        for(int j = 1; j < myConnectedDevices.size()+1; j++)
         {
-            myStrings[j] = myDevices.elementAt(j-1);
+            myStrings[j] = myConnectedDevices.elementAt(j-1);
         }
 
-        // Assign adapter to ListView
-        deviceList.setAdapter(adapter);
+        deviceListLive.setAdapter(adapterLive);
 
         // ListView Item Click Listener
-        deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        deviceListLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -261,13 +247,10 @@ public class MyAccountActivity extends AppCompatActivity {
                 // ListView Clicked item index
                 int itemPosition = position;
 
-                // ListView Clicked item value
-                //String itemValue = (String) deviceList.getItemAtPosition(position);
-
-                Intent intent= new Intent(MyAccountActivity.this, AnalysisActivity.class);
+                Intent intent= new Intent(LiveActivity.this, AnalysisActivity.class);
                 if(itemPosition != 0)
                 {
-                    intent.putExtra("DEVICENAME", adapter.getItem(itemPosition));
+                    intent.putExtra("DEVICENAME", adapterLive.getItem(itemPosition));
                     intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
                     startActivity(intent);
                 }
@@ -284,8 +267,6 @@ public class MyAccountActivity extends AppCompatActivity {
 
     void collectDeviceData(String addedDevice)
     {
-        ////////final int addedPosition = myDataHelper.addDevice(addedDevice);
-
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         final String deviceID = myPref.getString("deviceID", "No device");
 
@@ -302,7 +283,8 @@ public class MyAccountActivity extends AppCompatActivity {
                 if(!(dataSnapshot.getKey().toString().equals("status")))
                 {
                     myDatabase.addData(deviceName, Long.parseLong(dataSnapshot.getKey().toString()), Double.parseDouble(dataSnapshot.getValue().toString()), getApplication());
-                    ////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
+                    //////////////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
+                    setDataText();
                 }
                 else if(dataSnapshot.getKey().toString().equals("status"))
                 {
@@ -317,9 +299,16 @@ public class MyAccountActivity extends AppCompatActivity {
             public void onChildChanged(DataSnapshot dataSnapshot, String s)
             {
                 if(dataSnapshot.getKey().toString().equals("status"))
+                {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
+                    Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+                    setDataText();
 
-                Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+                    if(dataSnapshot.getValue().toString().equals("disconnected"))
+                        adapterLive.remove(deviceName);
+                    else
+                        adapterLive.add(deviceName);
+                }
             }
 
             @Override
@@ -337,34 +326,24 @@ public class MyAccountActivity extends AppCompatActivity {
     {
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
-        Vector<Double> allData = myDatabase.getAllData();
-        Vector<String> allDevice = myDatabase.getAllDevice();
-        Vector<Double> deviceData = new Vector<Double>();
+        Vector<String> allConnectedDevice = myDatabase.getAllStatusDevice("connected");
+        Vector<Double> allConnectedData = myDatabase.getAllStatusData("connected");
+        Vector<Double> connectedDeviceData = new Vector<Double>();
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
-        /*
-        yValues.add(new PieEntry(50f,"heater"));
-        yValues.add(new PieEntry(23f,"mixer"));
-        yValues.add(new PieEntry(14f,"refrigerator"));
-        yValues.add(new PieEntry(35f,"laptop"));
-        yValues.add(new PieEntry(40f,"television"));
-        yValues.add(new PieEntry(23f,"lamp"));
-        */
-
-
-        for(int i = 0; i < allDevice.size(); i++)
+        for(int i = 0; i < allConnectedDevice.size(); i++)
         {
-            deviceData.add(myDatabase.getSpecificDataTotal(allDevice.elementAt(i)));
-            yValues.add(new PieEntry(deviceData.elementAt(i).floatValue(), allDevice.elementAt(i)));
+            connectedDeviceData.add(myDatabase.getSpecificDataTotal(allConnectedDevice.elementAt(i)));
+            yValues.add(new PieEntry(connectedDeviceData.elementAt(i).floatValue(), allConnectedDevice.elementAt(i)));
         }
 
         double total = 0;
 
-        for(int i = 0; i < allData.size(); i++)
-            total += allData.elementAt(i);
+        for(int i = 0; i < allConnectedData.size(); i++)
+            total += allConnectedData.elementAt(i);
 
-        pieChart.animateY(2500,Easing.EasingOption.EaseInOutCubic);
+        pieChartLive.animateY(0, Easing.EasingOption.EaseInOutCubic); ////////////////////////////////////////////////
 
         PieDataSet dataSet = new PieDataSet(yValues,"Appliances");
         dataSet.setSliceSpace(3f);
@@ -375,37 +354,36 @@ public class MyAccountActivity extends AppCompatActivity {
         data.setValueTextSize(10f);
         data.setValueTextColor(Color.WHITE);
 
-        pieChart.getLegend().setTextColor(Color.WHITE); //In case of error delete, changes font to white
-        pieChart.setHoleRadius(80);                    //In case of error delete, changing the chart radius
-        pieChart.setDrawEntryLabels(false);            //showing description under the percentage for piechart
-        dataSet.setDrawValues(false);                  //not showing any values in the piechart
+        pieChartLive.getLegend().setTextColor(Color.WHITE); //In case of error delete, changes font to white
+        pieChartLive.setHoleRadius(80);                    //In case of error delete, changing the chart radius
+        pieChartLive.setDrawEntryLabels(false);            //showing description under the percentage for piechart
+        pieChartLive.setData(data);
 
-        pieChart.setData(data);
-
+        Log.d(TAG, "Total consumption is " + myDatabase.getTotalConsumption());
     }
 
     void goToAddDeviceActivity()
     {
-        Intent intent = new Intent(MyAccountActivity.this, AddDeviceActivity.class);
+        Intent intent = new Intent(LiveActivity.this, AddDeviceActivity.class);
         startActivity(intent);
     }
 
     void goToConnectedDeviceActivity()
     {
-        Intent intent = new Intent(MyAccountActivity.this, ConnectedDeviceActivity.class);
-        startActivity(intent);
-    }
-
-    void goToMyAccountActivity()
-    {
-        Intent intent = new Intent(MyAccountActivity.this, MyAccountActivity.class);
+        Intent intent = new Intent(LiveActivity.this, ConnectedDeviceActivity.class);
         startActivity(intent);
     }
 
     void goToLiveActivity()
     {
-        Intent intent = new Intent(MyAccountActivity.this, LiveActivity.class);
-        intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
+        Intent intent = new Intent(LiveActivity.this, LiveActivity.class);
+        startActivity(intent);
+    }
+
+    void goToMyAccountActivity()
+    {
+        Intent intent = new Intent(LiveActivity.this, MyAccountActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
         startActivity(intent);
     }
 
@@ -417,8 +395,13 @@ public class MyAccountActivity extends AppCompatActivity {
     void signOut()
     {
         userSignOut();
-        startActivity(new Intent(MyAccountActivity.this, MainActivity.class));
+        startActivity(new Intent(LiveActivity.this, MainActivity.class));
         Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
+    }
+
+    private void userSignOut()
+    {
+        firebaseAuth.signOut();
     }
 
     @Override
@@ -444,10 +427,5 @@ public class MyAccountActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void userSignOut()
-    {
-        firebaseAuth.signOut();
     }
 }

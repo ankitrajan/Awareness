@@ -3,6 +3,7 @@ package com.example.ankit.awareness;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -54,7 +55,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
     private ArrayAdapter<String> adapterConnected;
     private ListView deviceListConnected;
 
-    private DataHelper myDataHelper;
+    //////////private DataHelper myDataHelper;
 
     private static final String TAG = "ConnectedDeviceActivity";
 
@@ -78,6 +79,8 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         connectedDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_connected);
 
@@ -135,9 +138,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        myDataHelper = new DataHelper(getApplicationContext());
+        ////////////////myDataHelper = new DataHelper(getApplicationContext());
 
-        myDataHelper.emptyData();
+        ////////////////myDataHelper.emptyData();
 
         adapterConnected = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1);
@@ -292,7 +295,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
     void collectDeviceData(String addedDevice)
     {
-        final int addedPosition = myDataHelper.addDevice(addedDevice);
+        //////////////final int addedPosition = myDataHelper.addDevice(addedDevice);
 
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         final String deviceID = myPref.getString("deviceID", "No device");
@@ -310,7 +313,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                 if(!(dataSnapshot.getKey().toString().equals("status")))
                 {
                     myDatabase.addData(deviceName, Long.parseLong(dataSnapshot.getKey().toString()), Double.parseDouble(dataSnapshot.getValue().toString()), getApplication());
-                    myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
+                    //////////////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
                     setDataText();
                 }
                 else if(dataSnapshot.getKey().toString().equals("status"))
@@ -356,6 +359,14 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         Vector<String> allConnectedDevice = myDatabase.getAllStatusDevice("connected");
         Vector<Double> allConnectedData = myDatabase.getAllStatusData("connected");
         Vector<Double> connectedDeviceData = new Vector<Double>();
+        
+        /*
+        for(int i = 0; i < allConnectedDevice.size(); i++)
+        {
+            Log.d("DatabaseReturn", "Connected Device name: " + allConnectedDevice.elementAt(i));
+            //Log.d("DatabaseReturn", "Connected Device data: " + allConnectedData.elementAt(i));
+        }
+        */
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
@@ -387,6 +398,8 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
 
         pieChartConnected.setData(data);
+
+        Log.d(TAG, "Total consumption is " + myDatabase.getTotalConsumption());
     }
 
     void goToAddDeviceActivity()
@@ -405,6 +418,14 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
     {
         Intent intent = new Intent(ConnectedDeviceActivity.this, MyAccountActivity.class);
         intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
+        startActivity(intent);
+    }
+
+    void goToLiveActivity()
+    {
+        Intent intent = new Intent(ConnectedDeviceActivity.this, LiveActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
+
         startActivity(intent);
     }
 
@@ -439,6 +460,10 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         {
             case R.id.refresh:
                 refresh();
+                return true;
+
+            case R.id.live:
+                goToLiveActivity();
                 return true;
 
             default:

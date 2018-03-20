@@ -26,20 +26,19 @@
         <activity
             android:name=".MyAccountActivity"
             android:label=""
-            android:theme="@style/account" >
+            android:theme="@style/account">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ankit.awareness.ConnectedDeviceActivity" />
-
         </activity>
         <activity
             android:name=".AnalysisActivity"
             android:hardwareAccelerated="true"
-            android:label="">
-        </activity>
-        <activity android:name=".SettingsActivity"
+            android:label=""></activity>
+        <activity
+            android:name=".SettingsActivity"
             android:label=""
-            android:theme="@style/account"/>
+            android:theme="@style/account" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -53,12 +52,11 @@
         <activity
             android:name=".AddDeviceActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ConnectedDeviceActivity"
+        <activity
+            android:name=".ConnectedDeviceActivity"
             android:label=""
-            android:theme="@style/account"
-            />
-
-
+            android:theme="@style/account" />
+        <activity android:name=".LiveActivity"></activity>
     </application>
 
 </manifest>
