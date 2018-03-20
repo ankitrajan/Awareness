@@ -8,19 +8,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     private static double totalConsumption = 0;
     //private static double lastStamp = 0;
     //private static String lastName = "";
-    private static String[] lookupName = {"heater", "dishwasher", "charger"};
-    private static double[] lookup = {2,5,1};
+    private static String[] lookupName = {"heater", "dishwasher", "charger", "fridge"};
+    private static double[] lookup = {2,5,1,7};
 
     // Database Name
     private static final String DATABASE_NAME = "Data Manager";
@@ -414,6 +416,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return allStatusDevice;
     }
+
+
+
+    public Vector<String> getAllDayDevice()
+    {
+        Calendar currentDate = Calendar.getInstance();
+        int year = currentDate.get(Calendar.YEAR)%1000;
+        int month = currentDate.get(Calendar.MONTH) + 1;
+        int day = currentDate.get(Calendar.DAY_OF_MONTH);
+
+        Log.d("DatabaseReturn", "Current date obtained is " + year + " " + month + " " + day);
+
+        Vector<String>  allDayDevice = new Vector<String>();
+        String selectQuery = "SELECT DISTINCT(name) FROM " + TABLE_DATA + " WHERE year = \"" + year + "\" AND month = \"" +  month + "\" AND day = \"" + day + "\" ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            int myPosition = 0;
+
+            do
+            {
+                allDayDevice.add(myPosition++, cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        for(int i = 0; i < allDayDevice.size(); i++)
+            Log.d("DatabaseReturn", "Added daily device " + allDayDevice.elementAt(i));
+
+        //Log.d("MyAccountActivity", "Returned vector size of " + queryStatus + " devices = " + allDayDevice.size());
+
+        return allDayDevice;
+    }
+
+
+
+
+
 
     public Vector<String> getAllAppliance()
     {
