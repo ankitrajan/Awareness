@@ -53,7 +53,9 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         //overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
 
         if(getIntent().getExtras().getString("REFRESH") != null)
+        {
             overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+        }
         else
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
@@ -232,6 +234,12 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
             if(callingActivity.equals("ConnectedDeviceActivity"))
             {
                 Intent intent = new Intent(AnalysisActivity.this, ConnectedDeviceActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            else if(callingActivity.equals("LiveActivity"))
+            {
+                Intent intent = new Intent(AnalysisActivity.this, LiveActivity.class);
                 startActivity(intent);
                 return true;
             }

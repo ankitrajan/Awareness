@@ -40,6 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Vector;
 
 public class ConnectedDeviceActivity extends AppCompatActivity{
@@ -203,8 +204,10 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
                 myDatabase.addDevice(dataSnapshot.getKey().toString(), dataSnapshot.child("status").getValue().toString());
                 collectDeviceData(dataSnapshot.getKey().toString());
+                /*
                 if(dataSnapshot.child("status").getValue().toString().equals("connected"))
                     adapterConnected.add(dataSnapshot.getKey().toString());
+                 */
             }
 
             @Override
@@ -232,7 +235,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
-        final Vector<String> myConnectedDevices = myDatabase.getAllStatusDevice("connected");
+        final Vector<String> myConnectedDevices = myDatabase.getAllDayDevice();
 
         Log.d(TAG, "Returned connectedDevice size is " + myConnectedDevices.size());
 
@@ -313,6 +316,20 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                 if(!(dataSnapshot.getKey().toString().equals("status")))
                 {
                     myDatabase.addData(deviceName, Long.parseLong(dataSnapshot.getKey().toString()), Double.parseDouble(dataSnapshot.getValue().toString()), getApplication());
+
+                    Calendar currentDate = Calendar.getInstance();
+                    int year = currentDate.get(Calendar.YEAR)%1000;
+                    int month = currentDate.get(Calendar.MONTH) + 1;
+                    int day = currentDate.get(Calendar.DAY_OF_MONTH);
+
+                    long stamp = Long.parseLong(dataSnapshot.getKey().toString());
+
+                    if(!((((stamp%(100000000L))/1000000L) != day) || (((stamp%(10000000000L))/100000000L) != month) || (((stamp%(1000000000000L))/10000000000L) != year)))
+                    {
+                        adapterConnected.remove(deviceName);
+                        adapterConnected.add(deviceName);
+                    }
+
                     //////////////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
                     setDataText();
                 }
@@ -334,10 +351,12 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
                     setDataText();
 
+                    /*
                     if(dataSnapshot.getValue().toString().equals("disconnected"))
                         adapterConnected.remove(deviceName);
                     else
                         adapterConnected.add(deviceName);
+                        */
                 }
             }
 
@@ -356,10 +375,15 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
     {
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
+        /*
         Vector<String> allConnectedDevice = myDatabase.getAllStatusDevice("connected");
         Vector<Double> allConnectedData = myDatabase.getAllStatusData("connected");
         Vector<Double> connectedDeviceData = new Vector<Double>();
-        
+        */
+
+        Vector<String> allDayDevice = myDatabase.getAllDayDevice();
+        Vector<Double> dayDeviceData = new Vector<Double>();
+
         /*
         for(int i = 0; i < allConnectedDevice.size(); i++)
         {
@@ -370,16 +394,11 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
-        for(int i = 0; i < allConnectedDevice.size(); i++)
+        for(int i = 0; i < allDayDevice.size(); i++)
         {
-            connectedDeviceData.add(myDatabase.getSpecificDataTotal(allConnectedDevice.elementAt(i)));
-            yValues.add(new PieEntry(connectedDeviceData.elementAt(i).floatValue(), allConnectedDevice.elementAt(i)));
+            dayDeviceData.add(myDatabase.getSpecificDataTotal(allDayDevice.elementAt(i)));
+            yValues.add(new PieEntry(dayDeviceData.elementAt(i).floatValue(), allDayDevice.elementAt(i)));
         }
-
-        double total = 0;
-
-        for(int i = 0; i < allConnectedData.size(); i++)
-            total += allConnectedData.elementAt(i);
 
         pieChartConnected.animateY(0, Easing.EasingOption.EaseInOutCubic); ////////////////////////////////////////////////
 
@@ -399,7 +418,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
         pieChartConnected.setData(data);
 
-        Log.d(TAG, "Total consumption is " + myDatabase.getTotalConsumption());
+        //Log.d(TAG, "Total consumption is " + myDatabase.getTotalConsumption());
     }
 
     void goToAddDeviceActivity()

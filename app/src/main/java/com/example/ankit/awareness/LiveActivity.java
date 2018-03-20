@@ -251,13 +251,13 @@ public class LiveActivity extends AppCompatActivity {
                 if(itemPosition != 0)
                 {
                     intent.putExtra("DEVICENAME", adapterLive.getItem(itemPosition));
-                    intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
+                    intent.putExtra("STARTINGACTIVITY", "LiveActivity");
                     startActivity(intent);
                 }
                 else if (myStrings[0].equals("All"))
                 {
                     intent.putExtra("DEVICENAME", "All");
-                    intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
+                    intent.putExtra("STARTINGACTIVITY", "LiveActivity");
                     startActivity(intent);
                 }
             }
