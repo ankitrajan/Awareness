@@ -68,6 +68,10 @@ public class LiveActivity extends AppCompatActivity {
         else
             overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
 
+        mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        setSupportActionBar(mToolbar);
+
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         liveDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_live);
@@ -408,7 +412,7 @@ public class LiveActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_toolbar_my_account, menu);
+        inflater.inflate(R.menu.menu_toolbar_my_account2, menu);
         return true;
     }
 
@@ -420,9 +424,9 @@ public class LiveActivity extends AppCompatActivity {
                 refresh();
                 return true;
 
-            case R.id.live:
+          /*  case R.id.live:                                   //removing the live button in the live activity
                 goToLiveActivity();
-                return true;
+                return true; */
 
             default:
                 return super.onOptionsItemSelected(item);

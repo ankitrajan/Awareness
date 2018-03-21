@@ -10,11 +10,13 @@
 
     <item
         android:id="@+id/daily_consumption"
-        android:title="Daily Consumption" />
+        android:title="Daily Consumption"
+        android:icon="@mipmap/daily"/>
 
     <item
         android:id="@+id/monthly_consumption"
-        android:title="Monthly Consumption" />
+        android:title="Monthly Consumption"
+        android:icon="@mipmap/monthly"/>
 
     <item
         android:id="@+id/settings"
