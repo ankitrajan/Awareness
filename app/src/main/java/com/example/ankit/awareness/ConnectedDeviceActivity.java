@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -23,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,6 +46,8 @@ import java.util.Calendar;
 import java.util.Vector;
 
 public class ConnectedDeviceActivity extends AppCompatActivity{
+
+    AnimationDrawable batteryani;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -67,6 +71,13 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connected_device);
+
+        ImageView imageView = (ImageView)findViewById(R.id.batteryanimation);
+        imageView.setBackgroundResource(R.drawable.batteryanimation);
+        batteryani = (AnimationDrawable) imageView.getBackground();
+
+
+
 
         if( getIntent().getExtras() != null)
         {
@@ -227,6 +238,12 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         });
 
         displayList();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        batteryani.start();
     }
 
     void displayList()
