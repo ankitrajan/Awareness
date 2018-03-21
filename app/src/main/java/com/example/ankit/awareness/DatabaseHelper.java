@@ -454,6 +454,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return allDayDevice;
     }
 
+    public Vector<String> getAllMonthDevice()
+    {
+        Calendar currentDate = Calendar.getInstance();
+        int year = currentDate.get(Calendar.YEAR)%1000;
+        int month = currentDate.get(Calendar.MONTH) + 1;
+
+        Log.d("DatabaseReturn", "Current date obtained is " + year + " " + month);
+
+        Vector<String>  allMonthDevice = new Vector<String>();
+        String selectQuery = "SELECT DISTINCT(name) FROM " + TABLE_DATA + " WHERE year = \"" + year + "\" AND month = \"" +  month + "\" ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            int myPosition = 0;
+
+            do
+            {
+                allMonthDevice.add(myPosition++, cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        for(int i = 0; i < allMonthDevice.size(); i++)
+            Log.d("DatabaseReturn", "Added monthly device " + allMonthDevice.elementAt(i));
+
+        //Log.d("MyAccountActivity", "Returned vector size of " + queryStatus + " devices = " + allDayDevice.size());
+
+        return allMonthDevice;
+    }
+
 
 
 
