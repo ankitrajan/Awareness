@@ -7,10 +7,4 @@
             android:icon="@android:drawable/stat_notify_sync_noanim"
             app:showAsAction="always" />
 
-        <item
-            android:id="@+id/live"
-            android:title="Live"
-            android:itemBackground="#FF0000"
-            app:showAsAction="always" />
-
 </menu>

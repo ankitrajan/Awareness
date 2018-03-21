@@ -79,18 +79,18 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         applianceName = (TextView) findViewById(R.id.ApplianceName);
 
-        refreshGraphButton = (Button) findViewById(R.id.RefreshGraph);
+        //refreshGraphButton = (Button) findViewById(R.id.RefreshGraph);
 
         applianceName.setText(currentDevice);
 
-        refreshGraphButton.setOnClickListener(new View.OnClickListener()
+        /*refreshGraphButton.setOnClickListener(new View.OnClickListener()                      //removing the refresh button
         {
             @Override
             public void onClick(View v)
             {
                 refreshGraph();
             }
-        });
+        }); */
 
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 

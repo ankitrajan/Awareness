@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -215,7 +216,10 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
-        //else
+      //  else
+
+           // Snackbar snackbar = Snackbar.make(coordinatorLayout, "www.journaldev.com", Snackbar.LENGTH_LONG);
+        // snackbar.show();
             //emailText.setError("Email empty");
            // passwordText.setError("Password empty");
         //    Toast.makeText(MainActivity.this, "Field(s) is/are empty", Toast.LENGTH_LONG).show();
