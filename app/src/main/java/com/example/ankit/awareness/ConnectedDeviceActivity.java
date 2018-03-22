@@ -248,16 +248,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
     void displayList()
     {
-        Log.d(TAG, "In displayList");
-
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
         final Vector<String> myConnectedDevices = myDatabase.getAllDayDevice();
-
-        Log.d(TAG, "Returned connectedDevice size is " + myConnectedDevices.size());
-
-        for (int i = 0; i < myConnectedDevices.size(); i++)
-            Log.d(TAG, "Device added: " + myConnectedDevices.elementAt(i));
 
         final String myStrings[] = new String[myConnectedDevices.size()+1];
 

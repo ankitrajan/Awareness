@@ -40,6 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Vector;
 
 public class MyAccountActivity extends AppCompatActivity {
@@ -52,7 +53,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> adapterMonthly;
     private ListView deviceList;
 
     ////////private DataHelper myDataHelper;
@@ -142,7 +143,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
         //////////myDataHelper.emptyData();
 
-        adapter = new ArrayAdapter<String>(this,
+        adapterMonthly = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1);
 
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
@@ -151,9 +152,9 @@ public class MyAccountActivity extends AppCompatActivity {
         Log.d(TAG, "First login value for adapter: " + firstLogin);
 
         if(!firstLogin)
-            adapter.add("All");
+            adapterMonthly.add("All");
         else
-            adapter.add("No Connected Device");
+            adapterMonthly.add("No Connected Device");
 
         //final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
@@ -203,7 +204,7 @@ public class MyAccountActivity extends AppCompatActivity {
             {
                 myDatabase.addDevice(dataSnapshot.getKey().toString(), "connected");
                 collectDeviceData(dataSnapshot.getKey().toString());
-                adapter.add(dataSnapshot.getKey().toString());
+                //adapter.add(dataSnapshot.getKey().toString());
             }
 
             @Override
@@ -229,7 +230,7 @@ public class MyAccountActivity extends AppCompatActivity {
     {
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
-        final Vector<String> myDevices = myDatabase.getAllDevice();
+        final Vector<String> myDevices = myDatabase.getAllMonthDevice();
 
         final String myStrings[] = new String[myDevices.size()+1];
 
@@ -249,7 +250,7 @@ public class MyAccountActivity extends AppCompatActivity {
         }
 
         // Assign adapter to ListView
-        deviceList.setAdapter(adapter);
+        deviceList.setAdapter(adapterMonthly);
 
         // ListView Item Click Listener
         deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -267,7 +268,7 @@ public class MyAccountActivity extends AppCompatActivity {
                 Intent intent= new Intent(MyAccountActivity.this, AnalysisActivity.class);
                 if(itemPosition != 0)
                 {
-                    intent.putExtra("DEVICENAME", adapter.getItem(itemPosition));
+                    intent.putExtra("DEVICENAME", adapterMonthly.getItem(itemPosition));
                     intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
                     startActivity(intent);
                 }
@@ -303,6 +304,24 @@ public class MyAccountActivity extends AppCompatActivity {
                 {
                     myDatabase.addData(deviceName, Long.parseLong(dataSnapshot.getKey().toString()), Double.parseDouble(dataSnapshot.getValue().toString()), getApplication());
                     ////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
+
+
+                    Calendar currentDate = Calendar.getInstance();
+                    int year = currentDate.get(Calendar.YEAR)%1000;
+                    int month = currentDate.get(Calendar.MONTH) + 1;
+
+                    long stamp = Long.parseLong(dataSnapshot.getKey().toString());
+
+                    if(!((((stamp%(10000000000L))/100000000L) != month) || (((stamp%(1000000000000L))/10000000000L) != year)))
+                    {
+                        adapterMonthly.remove(deviceName);
+                        adapterMonthly.add(deviceName);
+                    }
+
+                    //////////////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
+                    setDataText();
+
+
                 }
                 else if(dataSnapshot.getKey().toString().equals("status"))
                 {
@@ -317,9 +336,11 @@ public class MyAccountActivity extends AppCompatActivity {
             public void onChildChanged(DataSnapshot dataSnapshot, String s)
             {
                 if(dataSnapshot.getKey().toString().equals("status"))
+                {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
-
-                Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+                    setDataText();
+                }
             }
 
             @Override
@@ -337,9 +358,15 @@ public class MyAccountActivity extends AppCompatActivity {
     {
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
-        Vector<Double> allData = myDatabase.getAllData();
-        Vector<String> allDevice = myDatabase.getAllDevice();
-        Vector<Double> deviceData = new Vector<Double>();
+        //Vector<Double> allData = myDatabase.getAllData();
+        //Vector<String> allDevice = myDatabase.getAllDevice();
+        //Vector<Double> deviceData = new Vector<Double>();
+
+
+        ////get month device
+        Vector<String> allMonthDevice = myDatabase.getAllMonthDevice();
+        Vector<Double> monthDeviceData = new Vector<Double>();
+
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
@@ -353,16 +380,11 @@ public class MyAccountActivity extends AppCompatActivity {
         */
 
 
-        for(int i = 0; i < allDevice.size(); i++)
+        for(int i = 0; i < allMonthDevice.size(); i++)
         {
-            deviceData.add(myDatabase.getSpecificDataTotal(allDevice.elementAt(i)));
-            yValues.add(new PieEntry(deviceData.elementAt(i).floatValue(), allDevice.elementAt(i)));
+            monthDeviceData.add(myDatabase.getSpecificDataTotal(allMonthDevice.elementAt(i)));
+            yValues.add(new PieEntry(monthDeviceData.elementAt(i).floatValue(), allMonthDevice.elementAt(i)));
         }
-
-        double total = 0;
-
-        for(int i = 0; i < allData.size(); i++)
-            total += allData.elementAt(i);
 
         pieChart.animateY(2500,Easing.EasingOption.EaseInOutCubic);
 
