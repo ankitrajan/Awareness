@@ -4,15 +4,15 @@
 
     <item
         android:drawable="@drawable/ic_batteryempty"
-        android:duration="400"/>
+        android:duration="700"/>
 
     <item
         android:drawable="@drawable/ic_batteryhalf"
-        android:duration="400"/>
+        android:duration="700"/>
 
     <item
         android:drawable="@drawable/ic_batteryfull"
-        android:duration="400"/>
+        android:duration="700"/>
 
 
 </animation-list>
