@@ -40,17 +40,46 @@
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechartConnected"
             android:layout_width="450dp"
-            android:layout_height="320dp"
+            android:layout_height="250dp"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/DeviceListConnected"></com.github.mikephil.charting.charts.PieChart>
+            android:layout_alignStart="@+id/DeviceListConnected">
 
-        <ImageView
-            android:id="@+id/batteryanimation"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:backgroundTint="@android:color/white" />
+        </com.github.mikephil.charting.charts.PieChart>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+
+            <ImageView
+                android:id="@+id/batteryanimation"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="361dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:backgroundTint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/kettleanimation"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="361dp"
+                android:layout_marginStart="200dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
 

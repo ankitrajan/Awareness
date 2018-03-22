@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:drawable="@drawable/ic_kettle1"
+        android:duration="1000"/>
+
+    <item
+        android:drawable="@drawable/ic_kettle2"
+        android:duration="1000"/>
+
+    <item
+        android:drawable="@drawable/ic_kettle3"
+        android:duration="1000"/>
+
+    <item
+        android:drawable="@drawable/ic_kettle4"
+        android:duration="1000"/>
+
+</animation-list>

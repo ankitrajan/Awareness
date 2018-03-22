@@ -1,5 +1,6 @@
 package com.example.ankit.awareness;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -13,7 +14,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -23,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +48,12 @@ public class MainActivity extends AppCompatActivity
     private EditText emailText;
     private EditText passwordText;
 
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String SPF_NAME = "vidslogin";
+    Switch checkRememberMe;
+    EditText etUserName, etPassword;
+
     protected Button loginButton;
     protected Button resetPasswordButton;
 
@@ -60,6 +70,14 @@ public class MainActivity extends AppCompatActivity
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        checkRememberMe = (Switch) findViewById(R.id.checkbox);
+        etUserName = (EditText) findViewById(R.id.EmailField);
+        etPassword = (EditText) findViewById(R.id.PasswordField);
+
+        SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
+        etUserName.setText(loginPreferences.getString(USERNAME, ""));
+        etPassword.setText(loginPreferences.getString(PASSWORD, ""));
+
         //getActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -69,8 +87,10 @@ public class MainActivity extends AppCompatActivity
         emailText = (EditText) findViewById(R.id.EmailField);
         passwordText = (EditText) findViewById(R.id.PasswordField);
 
+
         loginButton = (Button) findViewById(R.id.Login);
         resetPasswordButton = (Button) findViewById(R.id.ResetPassword);
+
 
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
@@ -169,19 +189,22 @@ public class MainActivity extends AppCompatActivity
     {
         FirebaseAuth.getInstance().signOut();
 
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
+        final String email = emailText.getText().toString();
+        final String password = passwordText.getText().toString();
 
         if(!(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)))
-        {
+
+            {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
             {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task)
                 {
                     if (!(task.isSuccessful()))
-                    {
+                    {Toast.makeText(MainActivity.this, "Am everywhere", Toast.LENGTH_LONG).show();
                         try {
+
+
                             throw task.getException();
                         } catch(FirebaseAuthInvalidUserException e) {
                             emailText.setError("Email incorrect");
@@ -198,6 +221,27 @@ public class MainActivity extends AppCompatActivity
 
                         if (user.isEmailVerified())
                         {
+                            String strUserName = etUserName.getText().toString().trim();
+                            String strPassword = etPassword.getText().toString().trim();
+                            if (null == strUserName || strUserName.length() == 0)
+                            {
+                                etUserName.requestFocus();
+                            } else if (null == strPassword || strPassword.length() == 0)
+                            {
+                                etPassword.requestFocus();
+                            } else
+                            {
+                                if (checkRememberMe.isChecked())
+                                {
+                                    SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
+                                    loginPreferences.edit().putString(USERNAME, strUserName).putString(PASSWORD, strPassword).commit();
+                                } else
+                                {
+                                    SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
+                                    loginPreferences.edit().clear().commit();
+                                }
+                            }
+
                             // user is verified, so logged in, which will be detected by the AuthStateListener
                             finish();
                         }
