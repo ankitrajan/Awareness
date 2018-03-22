@@ -48,6 +48,7 @@ import java.util.Vector;
 public class ConnectedDeviceActivity extends AppCompatActivity{
 
     AnimationDrawable batteryani;
+    AnimationDrawable kettleani;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -76,7 +77,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         imageView.setBackgroundResource(R.drawable.batteryanimation);
         batteryani = (AnimationDrawable) imageView.getBackground();
 
-
+        ImageView imageView1 = (ImageView)findViewById(R.id.kettleanimation);
+        imageView1.setBackgroundResource(R.drawable.kettleanimation);
+        kettleani = (AnimationDrawable) imageView1.getBackground();
 
 
         if( getIntent().getExtras() != null)
@@ -243,8 +246,10 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+        kettleani.start();
         batteryani.start();
     }
+
 
     void displayList()
     {
