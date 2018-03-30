@@ -16,13 +16,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     private static double totalConsumption = 0;
     //private static double lastStamp = 0;
     //private static String lastName = "";
     private static String[] lookupName = {"heater", "dishwasher", "charger", "fridge"};
-    private static double[] lookup = {2,5,1,7};
+    private static double[] lookup = {150,200,15,500};
 
     // Database Name
     private static final String DATABASE_NAME = "Data Manager";
@@ -128,67 +128,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor stampCursor = db.rawQuery(stampsQuery, null);
 
-        if (stampCursor.getCount() == 1)
+        Cursor sameCursor = db.query(TABLE_DATA,
+                new String[] { KEY_APPLIANCE,KEY_INPUT },
+                KEY_APPLIANCE + " = ? and "+ KEY_INPUT + " = ?" ,
+                new String[] {name, String.valueOf(stamp)},
+                null, null, null, null);
+
+        if(sameCursor.moveToFirst())
         {
-            Log.d("AnalysisActivity", "Total count with same stamp (1): " + stampCursor.getCount());
+            Log.d("AnalysisActivity", "Element already in database");
+        }
+        else {
 
-            if (stampCursor.moveToFirst())
-            {
-                int myPosition = 0;
 
-                do
-                {
-                    Log.d("AnalysisActivity", "Stamp obtained from query: " + cursor);
-                    long currentStamp = stampCursor.getLong(0);
-                    String currentDevice = stampCursor.getString(1);
-                    double newData = -1;
+            if (stampCursor.getCount() == 1) {
+                Log.d("AnalysisActivity", "Total count with same stamp (1): " + stampCursor.getCount());
 
-                    for(int i = 0; i < lookupName.length; i++)
-                    {
-                        if(lookupName[i].equals(currentDevice))
-                        {
-                            newData = lookup[i];
-                            i += lookupName.length;
+                if (stampCursor.moveToFirst()) {
+                    int myPosition = 0;
+
+                    do {
+                        Log.d("AnalysisActivity", "Stamp obtained from query: " + cursor);
+                        long currentStamp = stampCursor.getLong(0);
+                        String currentDevice = stampCursor.getString(1);
+                        double newData = -1;
+
+                        for (int i = 0; i < lookupName.length; i++) {
+                            if (lookupName[i].equals(currentDevice)) {
+                                newData = lookup[i];
+                                i += lookupName.length;
+                            }
                         }
+
+                        ContentValues lookupValues = new ContentValues();
+                        lookupValues.put(KEY_DATA, newData);
+                        db.update(TABLE_DATA, lookupValues, KEY_APPLIANCE + " = ? AND " + KEY_INPUT + " = ?", new String[]{currentDevice, String.valueOf(currentStamp)});
+
+
+                    } while (stampCursor.moveToNext());
+                }
+
+                for (int i = 0; i < lookupName.length; i++) {
+                    if (lookupName[i].equals(name)) {
+                        values.put(KEY_DATA, lookup[i]);
+                        i += lookupName.length;
                     }
-
-                    ContentValues lookupValues = new ContentValues();
-                    lookupValues.put(KEY_DATA, newData);
-                    db.update(TABLE_DATA, lookupValues, KEY_APPLIANCE + " = ? AND " + KEY_INPUT + " = ?", new String[]{currentDevice, String.valueOf(currentStamp)});
-
-
-                } while (stampCursor.moveToNext());
-            }
-
-            for(int i = 0; i < lookupName.length; i++)
-            {
-                if(lookupName[i].equals(name))
-                {
-                    values.put(KEY_DATA, lookup[i]);
-                    i += lookupName.length;
                 }
-            }
-        }
-        else if(stampCursor.getCount() > 1)
-        {
-            Log.d("AnalysisActivity", "Total count with same stamp (>1): " + stampCursor.getCount());
+            } else if (stampCursor.getCount() > 1) {
+                Log.d("AnalysisActivity", "Total count with same stamp (>1): " + stampCursor.getCount());
 
-            for(int i = 0; i < lookupName.length; i++)
-            {
-                if(lookupName[i].equals(name))
-                {
-                    Log.d("AnalysisActivity", "Found appliance name: " + lookupName[i]);
-                    values.put(KEY_DATA, lookup[i]);
-                    i += lookupName.length;
+                for (int i = 0; i < lookupName.length; i++) {
+                    if (lookupName[i].equals(name)) {
+                        Log.d("AnalysisActivity", "Found appliance name: " + lookupName[i]);
+                        values.put(KEY_DATA, lookup[i]);
+                        i += lookupName.length;
+                    }
                 }
+            } else {
+                Log.d("AnalysisActivity", "Total count with same stamp (0): " + stampCursor.getCount());
+                values.put(KEY_DATA, data);
+                totalConsumption += data;
             }
-        }
-        else
-        {
-            Log.d("AnalysisActivity", "Total count with same stamp (0): " + stampCursor.getCount());
-            values.put(KEY_DATA, data);
-            totalConsumption += data;
-        }
 
 
         /*
@@ -231,10 +231,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         */
 
-        //lastName = name;
-        //lastStamp = stamp;
+            //lastName = name;
+            //lastStamp = stamp;
 
-        db.insert(TABLE_DATA, null, values);
+            db.insert(TABLE_DATA, null, values);
+        }
         db.close();
     }
 

@@ -58,7 +58,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
     private Toolbar mToolbar;
 
-    private ArrayAdapter<String> adapterConnected;
+    AnalysisAdapter adapterConnected;
+
+    //private ArrayAdapter<String> adapterConnected;
     private ListView deviceListConnected;
 
     //////////private DataHelper myDataHelper;
@@ -157,8 +159,13 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
         ////////////////myDataHelper.emptyData();
 
-        adapterConnected = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1);
+        ////final AnalysisAdapter adapterConnected = new TrackAdapter(getApplicationContext(), R.layout.track_item);
+        ////listView.setAdapter(friendsAdapter);
+
+        adapterConnected = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item);
+
+        ///adapterConnected = new ArrayAdapter<String>(this,
+                //android.R.layout.simple_list_item_1, android.R.id.text1);
 
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
@@ -290,7 +297,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                 Intent intent= new Intent(ConnectedDeviceActivity.this, AnalysisActivity.class);
                 if(itemPosition != 0)
                 {
-                    intent.putExtra("DEVICENAME", adapterConnected.getItem(itemPosition));
+                    intent.putExtra("DEVICENAME", (String) adapterConnected.getItem(itemPosition));
                     intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
                     startActivity(intent);
                     //ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ConnectedDeviceActivity.this, findViewById(R.id.DeviceListConnected), "graphedDevice");
@@ -341,10 +348,13 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
                     if(!((((stamp%(100000000L))/1000000L) != day) || (((stamp%(10000000000L))/100000000L) != month) || (((stamp%(1000000000000L))/10000000000L) != year)))
                     {
-                        adapterConnected.remove(deviceName);
-                        adapterConnected.add(deviceName);
+                        if(!adapterConnected.isAlreadyInList(deviceName))
+                            adapterConnected.add(deviceName);
+                        //adapterConnected.remove(deviceName);
+                        //adapterConnected.add(deviceName);
                     }
 
+                    Log.d("testCase1", deviceName + " connected with value " + Double.parseDouble(dataSnapshot.getValue().toString()) + " at time " + String.format("%02d",Calendar.getInstance().get(Calendar.HOUR)) + String.format("%02d", Calendar.getInstance().get(Calendar.MINUTE)) + String.format("%02d", Calendar.getInstance().get(Calendar.SECOND)));
                     //////////////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
                     setDataText();
                 }
