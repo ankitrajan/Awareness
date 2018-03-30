@@ -162,7 +162,7 @@ public class AddDeviceActivity extends AppCompatActivity {
 
     void goToMyAccountActivity()
     {
-        Intent intent = new Intent(AddDeviceActivity.this, MyAccountActivity.class);
+        Intent intent = new Intent(AddDeviceActivity.this, ConnectedDeviceActivity.class);
         startActivity(intent);
     }
 }

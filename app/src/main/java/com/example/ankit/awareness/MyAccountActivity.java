@@ -53,7 +53,8 @@ public class MyAccountActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    private ArrayAdapter<String> adapterMonthly;
+    AnalysisAdapter adapterMonthly;
+    //private ArrayAdapter<String> adapterMonthly;
     private ListView deviceList;
 
     ////////private DataHelper myDataHelper;
@@ -143,8 +144,10 @@ public class MyAccountActivity extends AppCompatActivity {
 
         //////////myDataHelper.emptyData();
 
-        adapterMonthly = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1);
+        adapterMonthly = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item);
+
+        //adapterMonthly = new ArrayAdapter<String>(this,
+                //android.R.layout.simple_list_item_1, android.R.id.text1);
 
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
@@ -268,7 +271,7 @@ public class MyAccountActivity extends AppCompatActivity {
                 Intent intent= new Intent(MyAccountActivity.this, AnalysisActivity.class);
                 if(itemPosition != 0)
                 {
-                    intent.putExtra("DEVICENAME", adapterMonthly.getItem(itemPosition));
+                    intent.putExtra("DEVICENAME", (String) adapterMonthly.getItem(itemPosition));
                     intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
                     startActivity(intent);
                 }
@@ -314,8 +317,8 @@ public class MyAccountActivity extends AppCompatActivity {
 
                     if(!((((stamp%(10000000000L))/100000000L) != month) || (((stamp%(1000000000000L))/10000000000L) != year)))
                     {
-                        adapterMonthly.remove(deviceName);
-                        adapterMonthly.add(deviceName);
+                        if(!adapterMonthly.isAlreadyInList(deviceName))
+                            adapterMonthly.add(deviceName);
                     }
 
                     //////////////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));

@@ -46,7 +46,9 @@ public class LiveActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    private ArrayAdapter<String> adapterLive;
+    AnalysisAdapter adapterLive;
+
+    //private ArrayAdapter<String> adapterLive;
     private ListView deviceListLive;
 
     private static final String TAG = "LiveActivity";
@@ -129,8 +131,10 @@ public class LiveActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        adapterLive = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1);
+        adapterLive = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item);
+
+        //adapterLive = new ArrayAdapter<String>(this,
+                //android.R.layout.simple_list_item_1, android.R.id.text1);
 
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
@@ -254,7 +258,7 @@ public class LiveActivity extends AppCompatActivity {
                 Intent intent= new Intent(LiveActivity.this, AnalysisActivity.class);
                 if(itemPosition != 0)
                 {
-                    intent.putExtra("DEVICENAME", adapterLive.getItem(itemPosition));
+                    intent.putExtra("DEVICENAME", (String) adapterLive.getItem(itemPosition));
                     intent.putExtra("STARTINGACTIVITY", "LiveActivity");
                     startActivity(intent);
                 }
@@ -308,8 +312,10 @@ public class LiveActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
                     setDataText();
 
-                    if(dataSnapshot.getValue().toString().equals("disconnected"))
+                    if(dataSnapshot.getValue().toString().equals("disconnected")) {
                         adapterLive.remove(deviceName);
+                        adapterLive.notifyDataSetChanged();
+                    }
                     else
                         adapterLive.add(deviceName);
                 }
