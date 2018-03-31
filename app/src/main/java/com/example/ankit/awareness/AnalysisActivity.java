@@ -2,6 +2,7 @@ package com.example.ankit.awareness;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -31,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
+
+import static com.github.mikephil.charting.utils.ColorTemplate.COLORFUL_COLORS;
 
 public class AnalysisActivity extends AppCompatActivity  implements GestureDetector.OnGestureListener{
 
@@ -70,10 +76,12 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         barChart.setDrawBarShadow(false);
         barChart.setDrawValueAboveBar(true);
-        barChart.setMaxVisibleValueCount(50);
+        //barChart.setMaxVisibleValueCount(50);
         //barChart.setVisibleXRange(0, 31);
         barChart.setPinchZoom(false);
-        barChart.setDrawGridBackground(true);
+        //barChart.setDrawGridBackground(false);
+        barChart.setFitBars(false);
+        barChart.setBackgroundColor(Color.BLUE);
 
         String currentDevice = getIntent().getExtras().getString("DEVICENAME");
 
@@ -110,11 +118,83 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         }
 
         for(int i = 0; i < deviceStamp.size(); i++)
-            Log.d("AnalysisActivity", "Device Stamp added: " + deviceStamp.elementAt(i));
+            Log.d("GraphValues", "Device Stamp added: " + deviceStamp.elementAt(i));
 
         for(int i = 0; i < deviceData.size(); i++)
-            Log.d("AnalysisActivity", "Device Stamp added: " + deviceData.elementAt(i));
-/*
+            Log.d("GraphValues", "Device data added: " + deviceData.elementAt(i));
+
+        Calendar currentDate = Calendar.getInstance();
+        int year = currentDate.get(Calendar.YEAR)%1000;
+        int month = currentDate.get(Calendar.MONTH) + 1;
+
+        int totalDays = 0;
+
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+        {
+            totalDays = 31;
+        }
+        else if (month == 2)
+        {
+            if(year%4 != 0)
+                totalDays = 28;
+            else
+                totalDays = 29;
+        }
+        else
+        {
+            totalDays = 30;
+        }
+
+        Log.d("GraphValues", "TotalDays " + totalDays);
+
+        ArrayList<Float> thisMonth = new ArrayList<>();
+
+        for(int i = 0; i < totalDays; i++)
+        {
+            thisMonth.add(0f);
+        }
+
+        Log.d("GraphValues", "thisMonth length = " + thisMonth.size());
+
+        for(int i = 0; i < deviceData.size(); i++)
+        {
+            thisMonth.set((((int)(((deviceStamp.elementAt(i) % (100000000L)) / 1000000L)))-1), thisMonth.get((((int)(((deviceStamp.elementAt(i) % (100000000L)) / 1000000L))))-1) + (deviceData.elementAt(i)).floatValue());
+        }
+
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+
+        for(int i = 0; i < totalDays; i++)
+        {
+            Log.d("GraphValues", "Day value " + thisMonth.get(i));
+            barEntries.add(new BarEntry(i, thisMonth.get(i)));
+        }
+
+        /*
+        for(int i = 0; i < deviceData.size(); i++)
+        {
+            barEntries.add(new BarEntry((float) (((deviceStamp.elementAt(i) % (100000000L)) / 1000000L)), (deviceData.elementAt(i)).floatValue()));
+            Log.d("GraphValues", "Device day " + (float)(((deviceStamp.elementAt(i)%(100000000L))/1000000L)));
+            Log.d("GraphValues", "Device data " + (deviceData.elementAt(i)).floatValue());
+        }
+        */
+
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Data Set1");
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        BarData data = new BarData(barDataSet);
+        data.setBarWidth(0.9f);
+
+        barChart.setData(data);
+
+        String[] days = new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setValueFormatter(new MyXAxisValueFormatter(days));
+
+
+
+
+        /*
         for(int i = 0; i < deviceData.size(); i++)
         {
             Toast.makeText(getApplicationContext(), "Data: " + deviceData.elementAt(i) + " at " + deviceStamp.elementAt(i)%(100L), Toast.LENGTH_LONG).show();
@@ -139,6 +219,12 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
 */
 
+
+
+
+
+
+        /*
         Log.d("AnalysisActivity", "Current device: " + currentDevice);
 
         ArrayList<BarEntry> barEntries = new ArrayList<>(deviceData.size());
@@ -163,6 +249,17 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         data.setBarWidth(0.9f);
 
         barChart.setData(data);
+        */
+
+
+
+
+
+
+
+
+
+
 /*
         DataPoint allData[] = new DataPoint[deviceData.size()];
 
@@ -280,4 +377,22 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public class MyXAxisValueFormatter implements IAxisValueFormatter
+    {
+        private String[] mValues;
+
+        public MyXAxisValueFormatter(String[] values)
+        {
+            this.mValues = values;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis)
+        {
+            return mValues[(int)value];
+        }
+
+    }
 }
+
