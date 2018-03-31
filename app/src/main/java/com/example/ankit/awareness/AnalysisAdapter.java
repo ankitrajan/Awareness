@@ -18,15 +18,22 @@ public class AnalysisAdapter extends ArrayAdapter{
 
     private List appliance = new ArrayList<>();
     private List animation = new ArrayList<>();
+    private String callingActivity;
 
     private String[] lookupName = {"heater", "dishwasher", "charger", "fridge"};
 
     private Context c;
 
-    public AnalysisAdapter(Context context, int resource)
+    public AnalysisAdapter(Context context, int resource, String call)
     {
         super(context, resource);
         this.c = context;
+        callingActivity = call;
+    }
+
+    public String getCallingActivity()
+    {
+        return this.callingActivity;
     }
 
     public void add(String newAppliance)
@@ -121,7 +128,7 @@ public class AnalysisAdapter extends ArrayAdapter{
                     Log.d("Adapter", appliance.get(index) + " send to analysis with position " + index);
                     Intent intent= new Intent(c, AnalysisActivity.class);
                     intent.putExtra("DEVICENAME", (String) appliance.get(index));
-                    intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
+                    intent.putExtra("STARTINGACTIVITY", callingActivity);
                     c.startActivity(intent);
 
                     //Send to FriendInfoActivity with proper information when name is clicked

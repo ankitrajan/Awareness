@@ -72,11 +72,15 @@ public class MyAccountActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setContentView(R.layout.activity_my_account);
 
-
-        if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("ConnectedDeviceActivity"))
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        if( getIntent().getExtras() != null)
+        {
+            if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("ConnectedDeviceActivity"))
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            else
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+        }
         else
-            overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
@@ -144,7 +148,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
         //////////myDataHelper.emptyData();
 
-        adapterMonthly = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item);
+        adapterMonthly = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item, "MyAccountActivity");
 
         //adapterMonthly = new ArrayAdapter<String>(this,
                 //android.R.layout.simple_list_item_1, android.R.id.text1);
