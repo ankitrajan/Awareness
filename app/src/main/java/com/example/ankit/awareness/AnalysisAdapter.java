@@ -1,7 +1,9 @@
 package com.example.ankit.awareness;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +31,15 @@ public class AnalysisAdapter extends ArrayAdapter{
 
     public void add(String newAppliance)
     {
-        appliance.add(newAppliance);
-
         if(newAppliance.equals("All") || newAppliance.equals("No Connected Device"))
         {
+            Log.d("Adapter", newAppliance + " added with position " + -1);
+
+            appliance.add(newAppliance);
             animation.add(-1);
 
             super.add(newAppliance);
-            super.add(-1);
+            //super.add(-1);
         }
         else
         {
@@ -51,10 +54,13 @@ public class AnalysisAdapter extends ArrayAdapter{
                 }
             }
 
+            //Log.d("Adapter", newAppliance + " added with position " + position);
+
+            appliance.add(newAppliance);
             animation.add(position);
 
             super.add(newAppliance);
-            super.add(position);
+            //super.add(position);
         }
     }
 
@@ -104,29 +110,43 @@ public class AnalysisAdapter extends ArrayAdapter{
             holder.APPLIANCE = (TextView) row.findViewById(R.id.analysis_item_text);
             holder.ANIMATION = (ImageView) row.findViewById(R.id.animation_item_image);
 
-            /*
             holder.APPLIANCE.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAuth = FirebaseAuth.getInstance();
+                    for(int i = 0; i < appliance.size(); i ++)
+                        Log.d("Adapter", "All appliance in order: " + appliance.get(i));
+
+                    int index = (int) v.getTag();
+
+                    Log.d("Adapter", appliance.get(index) + " send to analysis with position " + index);
+                    Intent intent= new Intent(c, AnalysisActivity.class);
+                    intent.putExtra("DEVICENAME", (String) appliance.get(index));
+                    intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
+                    c.startActivity(intent);
 
                     //Send to FriendInfoActivity with proper information when name is clicked
+                    /*
                     Intent intent = new Intent(c, FriendInfoActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("FRIENDKEY", (String) getId(currentPosition));
                     intent.putExtra("USERKEY", mAuth.getCurrentUser().getUid().toString());
                     intent.putExtra("FRIENDNAME", (String) getItem(currentPosition));
                     c.startActivity(intent);
+                    */
                 }
             });
-            */
 
             row.setTag(holder);
         } else
             holder = (RowHolder) row.getTag();
 
+        holder.APPLIANCE.setTag(position);
+
         //Display name
         String EM = (String) getItem(position);
+
+        Log.d("Adapter", "String " + getItem(position) + " sent to holder");
+
         holder.APPLIANCE.setText(EM);
 
 

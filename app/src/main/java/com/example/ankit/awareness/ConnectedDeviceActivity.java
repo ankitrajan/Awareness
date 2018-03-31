@@ -170,10 +170,14 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
 
-        if(!firstLogin)
+        if(!firstLogin) {
             adapterConnected.add("All");
-        else
+            adapterConnected.notifyDataSetChanged();
+        }
+        else {
             adapterConnected.add("No Connected Device");
+            adapterConnected.notifyDataSetChanged();
+        }
 
 
         String userID = firebaseAuth.getCurrentUser().getUid();
@@ -282,6 +286,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         deviceListConnected.setAdapter(adapterConnected);
 
         // ListView Item Click Listener
+        /*
         deviceListConnected.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -316,6 +321,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
             }
 
         });
+        */
     }
 
     void collectDeviceData(String addedDevice)
@@ -348,8 +354,10 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
                     if(!((((stamp%(100000000L))/1000000L) != day) || (((stamp%(10000000000L))/100000000L) != month) || (((stamp%(1000000000000L))/10000000000L) != year)))
                     {
-                        if(!adapterConnected.isAlreadyInList(deviceName))
+                        if(!adapterConnected.isAlreadyInList(deviceName)) {
                             adapterConnected.add(deviceName);
+                            adapterConnected.notifyDataSetChanged();
+                        }
                         //adapterConnected.remove(deviceName);
                         //adapterConnected.add(deviceName);
                     }
