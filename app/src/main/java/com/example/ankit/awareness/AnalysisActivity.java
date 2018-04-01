@@ -62,8 +62,12 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         {
             overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
         }
-        else
+        else {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+        }
+
+        String callingActivity = getIntent().getExtras().getString("STARTINGACTIVITY");
 
         //mToolbar = (Toolbar) findViewById(R.id.nav_action);
         //setSupportActionBar(mToolbar);
@@ -126,8 +130,39 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         Calendar currentDate = Calendar.getInstance();
         int year = currentDate.get(Calendar.YEAR)%1000;
         int month = currentDate.get(Calendar.MONTH) + 1;
+        int day = currentDate.get(Calendar.DAY_OF_MONTH);
+
+        ArrayList<Float> thisMonth = new ArrayList<>();
+        ArrayList<Float> thisDay = new ArrayList<>();
+
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+
+        for(int i = 0; i < deviceStamp.size(); i++)
+        {
+            if(callingActivity.equals("MyAccountActivity"))
+            {
+                if(((deviceStamp.elementAt(i) %(10000000000L))/100000000L) != month)
+                {
+                    deviceStamp.remove(i);
+                    deviceData.remove(i);
+                }
+            }
+            else if(callingActivity.equals("ConnectedDeviceActivity"))
+            {
+                if(((deviceStamp.elementAt(i) %(100000000L))/1000000L) != day)
+                {
+                    deviceStamp.remove(i);
+                    deviceData.remove(i);
+                }
+            }
+            else if(callingActivity.equals("LiveActivity"))
+            {
+
+            }
+        }
 
         int totalDays = 0;
+        int totalHours = 24;
 
         if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
         {
@@ -147,26 +182,45 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         Log.d("GraphValues", "TotalDays " + totalDays);
 
-        ArrayList<Float> thisMonth = new ArrayList<>();
 
-        for(int i = 0; i < totalDays; i++)
-        {
-            thisMonth.add(0f);
+        if(callingActivity.equals("MyAccountActivity")) {
+
+            for (int i = 0; i < totalDays; i++) {
+                thisMonth.add(0f);
+            }
+
+            Log.d("GraphValues", "thisMonth length = " + thisMonth.size());
+
+            for (int i = 0; i < deviceData.size(); i++) {
+                thisMonth.set((((int) (((deviceStamp.elementAt(i) % (100000000L)) / 1000000L))) - 1), thisMonth.get((((int) (((deviceStamp.elementAt(i) % (100000000L)) / 1000000L)))) - 1) + (deviceData.elementAt(i)).floatValue());
+            }
+
+            for(int i = 0; i < totalDays; i++)
+            {
+                Log.d("GraphValues", "Day value " + thisMonth.get(i));
+                barEntries.add(new BarEntry(i, thisMonth.get(i)));
+            }
         }
-
-        Log.d("GraphValues", "thisMonth length = " + thisMonth.size());
-
-        for(int i = 0; i < deviceData.size(); i++)
+        else if(callingActivity.equals("ConnectedDeviceActivity"))
         {
-            thisMonth.set((((int)(((deviceStamp.elementAt(i) % (100000000L)) / 1000000L)))-1), thisMonth.get((((int)(((deviceStamp.elementAt(i) % (100000000L)) / 1000000L))))-1) + (deviceData.elementAt(i)).floatValue());
+            for (int i = 0; i < totalHours; i++) {
+                thisDay.add(0f);
+            }
+
+
+            for (int i = 0; i < deviceData.size(); i++) {
+                thisDay.set((((int) (((deviceStamp.elementAt(i) % (1000000L)) / 10000L)))), thisDay.get((((int) (((deviceStamp.elementAt(i) % (1000000L)) / 10000L))))) + (deviceData.elementAt(i)).floatValue());
+            }
+
+            for(int i = 0; i < totalHours; i++)
+            {
+                Log.d("GraphValues", "Day value " + thisDay.get(i));
+                barEntries.add(new BarEntry(i, thisDay.get(i)));
+            }
         }
-
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-
-        for(int i = 0; i < totalDays; i++)
+        else if(callingActivity.equals("LiveActivity"))
         {
-            Log.d("GraphValues", "Day value " + thisMonth.get(i));
-            barEntries.add(new BarEntry(i, thisMonth.get(i)));
+
         }
 
         /*
@@ -186,10 +240,18 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         barChart.setData(data);
 
-        String[] days = new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+        String[] axisData;
+        if(callingActivity.equals("ConnectedDeviceActivity"))
+        {
+            axisData = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+        }
+        else
+        {
+            axisData = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
+        }
 
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new MyXAxisValueFormatter(days));
+        xAxis.setValueFormatter(new MyXAxisValueFormatter(axisData));
 
 
 
@@ -337,6 +399,7 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
             else if(callingActivity.equals("LiveActivity"))
             {
                 Intent intent = new Intent(AnalysisActivity.this, LiveActivity.class);
+                intent.putExtra("STARTINGACTIVITY", "LiveActivity");
                 startActivity(intent);
                 return true;
             }

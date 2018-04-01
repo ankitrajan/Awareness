@@ -162,7 +162,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         ////final AnalysisAdapter adapterConnected = new TrackAdapter(getApplicationContext(), R.layout.track_item);
         ////listView.setAdapter(friendsAdapter);
 
-        adapterConnected = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item);
+        adapterConnected = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item, "ConnectedDeviceActivity");
 
         ///adapterConnected = new ArrayAdapter<String>(this,
                 //android.R.layout.simple_list_item_1, android.R.id.text1);

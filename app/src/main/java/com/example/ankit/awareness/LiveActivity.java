@@ -131,7 +131,7 @@ public class LiveActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        adapterLive = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item);
+        adapterLive = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item, "LiveActivity");
 
         //adapterLive = new ArrayAdapter<String>(this,
                 //android.R.layout.simple_list_item_1, android.R.id.text1);
