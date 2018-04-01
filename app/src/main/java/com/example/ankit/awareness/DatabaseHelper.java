@@ -16,13 +16,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     private static double totalConsumption = 0;
     //private static double lastStamp = 0;
     //private static String lastName = "";
-    private static String[] lookupName = {"heater", "dishwasher", "charger", "fridge"};
-    private static double[] lookup = {150,200,15,500};
+    private static String[] lookupName = {"kettle", "mixer", "panini press", "laptop charger"};
+    private static double[] lookup = {1000, 100, 620, 45};
 
     // Database Name
     private static final String DATABASE_NAME = "Data Manager";
