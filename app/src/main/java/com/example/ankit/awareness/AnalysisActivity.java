@@ -83,9 +83,9 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         //barChart.setMaxVisibleValueCount(50);
         //barChart.setVisibleXRange(0, 31);
         barChart.setPinchZoom(false);
-        //barChart.setDrawGridBackground(false);
+        barChart.setDrawGridBackground(false);
         barChart.setFitBars(false);
-        barChart.setBackgroundColor(Color.BLUE);
+        barChart.setBackgroundColor(Color.TRANSPARENT);
 
         String currentDevice = getIntent().getExtras().getString("DEVICENAME");
 
@@ -236,6 +236,7 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
         BarData data = new BarData(barDataSet);
+        data.setValueTextColor(Color.WHITE);
         data.setBarWidth(0.9f);
 
         barChart.setData(data);
