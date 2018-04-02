@@ -14,17 +14,6 @@
         android:layout_height="match_parent">
 
 
-        <ListView
-            android:id="@+id/DeviceListLive"
-            android:layout_width="450dp"
-            android:layout_height="250dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:textColor="@android:color/white"
-            android:textColorHint="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </RelativeLayout>
 
     <LinearLayout
@@ -37,12 +26,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/piechartLive"
-            android:layout_width="450dp"
-            android:layout_height="320dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/DeviceListLive"></com.github.mikephil.charting.charts.PieChart>
+        <GridView
+            android:id="@+id/DeviceListLive"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="auto_fit"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFFFFF"
+            android:verticalSpacing="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 
@@ -51,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:textAlignment="center"
         android:fitsSystemWindows="true"
         app:itemTextColor="@android:color/black"
         app:menu="@menu/menu_my_account"

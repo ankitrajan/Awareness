@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,14 +47,14 @@ public class LiveActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    AnalysisAdapter adapterLive;
+    LiveAdapter adapterLive;
 
     //private ArrayAdapter<String> adapterLive;
-    private ListView deviceListLive;
+    private GridView deviceListLive;
 
     private static final String TAG = "LiveActivity";
 
-    PieChart pieChartLive;
+    ///PieChart pieChartLive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,7 @@ public class LiveActivity extends AppCompatActivity {
             }
         });
 
+        /*
         pieChartLive = (PieChart) findViewById(R.id.piechartLive);
         pieChartLive.setUsePercentValues(true);
         pieChartLive.getDescription().setEnabled(false);
@@ -127,11 +129,13 @@ public class LiveActivity extends AppCompatActivity {
         pieChartLive.setDrawHoleEnabled(true);
         pieChartLive.setHoleColor(Color.TRANSPARENT);
         pieChartLive.setTransparentCircleRadius(85f);
+        */
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        adapterLive = new AnalysisAdapter(getApplicationContext(), R.layout.analysis_item, "LiveActivity");
+        adapterLive = new LiveAdapter(getApplicationContext(), R.layout.live_item, "LiveActivity");
 
         //adapterLive = new ArrayAdapter<String>(this,
                 //android.R.layout.simple_list_item_1, android.R.id.text1);
@@ -139,14 +143,16 @@ public class LiveActivity extends AppCompatActivity {
         final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
 
+        /*
         if(!firstLogin)
             adapterLive.add("All");
         else
             adapterLive.add("No Connected Device");
+            */
 
         String userID = firebaseAuth.getCurrentUser().getUid();
 
-        deviceListLive = (ListView) findViewById(R.id.DeviceListLive);
+        deviceListLive = (GridView) findViewById(R.id.DeviceListLive);
 
         final DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
 
@@ -233,19 +239,22 @@ public class LiveActivity extends AppCompatActivity {
         SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Boolean firstLogin = myPref.getBoolean("First Login", true);
 
+        /*
         if(!firstLogin)
             myStrings[0] = "All";
         else
             myStrings[0] = "No Connected Device";
+        */
 
-        for(int j = 1; j < myConnectedDevices.size()+1; j++)
+        for(int j = 0; j < myConnectedDevices.size(); j++)
         {
-            myStrings[j] = myConnectedDevices.elementAt(j-1);
+            myStrings[j] = myConnectedDevices.elementAt(j);
         }
 
         deviceListLive.setAdapter(adapterLive);
 
         // ListView Item Click Listener
+        /*
         deviceListLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -271,6 +280,7 @@ public class LiveActivity extends AppCompatActivity {
             }
 
         });
+        */
     }
 
     void collectDeviceData(String addedDevice)
@@ -292,7 +302,7 @@ public class LiveActivity extends AppCompatActivity {
                 {
                     myDatabase.addData(deviceName, Long.parseLong(dataSnapshot.getKey().toString()), Double.parseDouble(dataSnapshot.getValue().toString()), getApplication());
                     //////////////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
-                    setDataText();
+                    /////setDataText();
                 }
                 else if(dataSnapshot.getKey().toString().equals("status"))
                 {
@@ -310,7 +320,7 @@ public class LiveActivity extends AppCompatActivity {
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
                     Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
-                    setDataText();
+                    /////setDataText();
 
                     if(dataSnapshot.getValue().toString().equals("disconnected")) {
                         adapterLive.remove(deviceName);
@@ -332,6 +342,7 @@ public class LiveActivity extends AppCompatActivity {
         });
     }
 
+    /*
     void setDataText()
     {
         DatabaseHelper myDatabase = new DatabaseHelper(getApplicationContext());
@@ -371,6 +382,7 @@ public class LiveActivity extends AppCompatActivity {
 
         Log.d(TAG, "Total consumption is " + myDatabase.getTotalConsumption());
     }
+    */
 
     void goToAddDeviceActivity()
     {
@@ -397,10 +409,12 @@ public class LiveActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
     void refresh()
     {
         setDataText();
     }
+    */
 
     void signOut()
     {
@@ -427,7 +441,7 @@ public class LiveActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.refresh:
-                refresh();
+                //refresh();
                 return true;
 
           /*  case R.id.live:                                   //removing the live button in the live activity
