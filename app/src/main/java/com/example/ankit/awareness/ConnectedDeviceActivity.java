@@ -370,8 +370,10 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
 
+                    /*
                     if(dataSnapshot.getValue().toString().equals("connected"))
                         Toast.makeText(getApplicationContext(),deviceName + " is " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+                    */
                 }
             }
 
@@ -381,7 +383,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                 if(dataSnapshot.getKey().toString().equals("status"))
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
-                    Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+                    //////Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
                     setDataText();
 
                     /*

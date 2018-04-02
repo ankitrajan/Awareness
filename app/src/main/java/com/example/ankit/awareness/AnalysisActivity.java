@@ -137,29 +137,58 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         ArrayList<BarEntry> barEntries = new ArrayList<>();
 
+        ArrayList<Integer> elementsToRemove = new ArrayList<>();
+
         for(int i = 0; i < deviceStamp.size(); i++)
         {
             if(callingActivity.equals("MyAccountActivity"))
             {
+
                 if(((deviceStamp.elementAt(i) %(10000000000L))/100000000L) != month)
                 {
+                    Log.d("GraphValues", "Something removed in monthly");
+                    elementsToRemove.add(0, i);
+
+                    /*
                     deviceStamp.remove(i);
                     deviceData.remove(i);
+                    */
                 }
             }
             else if(callingActivity.equals("ConnectedDeviceActivity"))
             {
+                Log.d("StampTests", "Device stamp size = " + deviceStamp.size());
+                Log.d("StampTests", "Device stamp " + deviceStamp.elementAt(i) + " has day = " + (deviceStamp.elementAt(i) %(100000000L))/1000000L);
+
                 if(((deviceStamp.elementAt(i) %(100000000L))/1000000L) != day)
                 {
+                    Log.d("GraphValues", "Something removed in daily");
+                    Log.d("StampTests", "Element to remove = " + i);
+                    elementsToRemove.add(0, i);
+
+                    /*
                     deviceStamp.remove(i);
                     deviceData.remove(i);
+                    */
                 }
             }
-            else if(callingActivity.equals("LiveActivity"))
-            {
-
-            }
         }
+
+        Log.d("StampTests", "elementsToRemove size = " + elementsToRemove.size());
+
+        for(int i = 0; i < elementsToRemove.size(); i++)
+        {
+            Log.d("StampTests", "elementsToRemove at " + i + " = " + elementsToRemove.get(i));
+
+            deviceStamp.removeElementAt(elementsToRemove.get(i));
+            deviceData.removeElementAt(elementsToRemove.get(i));
+        }
+
+        Log.d("StampTests", "Device stamp size after removal = " + deviceStamp.size());
+        Log.d("StampTests", "Device data size after removal = " + deviceData.size());
+
+        Log.d("GraphValues", "deviceStamp size is " + deviceStamp.size());
+        Log.d("GraphValues", "deviceData size is " + deviceData.size());
 
         int totalDays = 0;
         int totalHours = 24;
@@ -180,8 +209,6 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
             totalDays = 30;
         }
 
-        Log.d("GraphValues", "TotalDays " + totalDays);
-
 
         if(callingActivity.equals("MyAccountActivity")) {
 
@@ -200,6 +227,8 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
                 Log.d("GraphValues", "Day value " + thisMonth.get(i));
                 barEntries.add(new BarEntry(i, thisMonth.get(i)));
             }
+
+            Log.d("GraphValues", "thisMonth values printed");
         }
         else if(callingActivity.equals("ConnectedDeviceActivity"))
         {
@@ -217,10 +246,6 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
                 Log.d("GraphValues", "Day value " + thisDay.get(i));
                 barEntries.add(new BarEntry(i, thisDay.get(i)));
             }
-        }
-        else if(callingActivity.equals("LiveActivity"))
-        {
-
         }
 
         /*
@@ -242,11 +267,13 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         barChart.setData(data);
 
         String[] axisData;
-        if(callingActivity.equals("ConnectedDeviceActivity"))
-        {
-            axisData = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+
+        Log.d("StampTests", "Calling activity = " + callingActivity);
+
+        if(callingActivity.equals("MyAccountActivity")) {
+            axisData = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
         }
-        else
+        else //if(callingActivity.equals("ConnectedDeviceActivity"))
         {
             axisData = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
         }
