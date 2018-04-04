@@ -3,10 +3,12 @@ package com.example.ankit.awareness;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -25,7 +27,10 @@ public class LiveAdapter extends ArrayAdapter{
     private String callingActivity;
     private int listSize;
 
-    private String[] lookupName = {"heater", "dishwasher", "charger", "fridge"};
+    private AnimationDrawable batteryani;
+    private AnimationDrawable kettleani;
+
+    private String[] lookupName = {"kettle", "laptop charger", "mixer", "panini press"};
 
     private Context c;
 
@@ -152,13 +157,35 @@ public class LiveAdapter extends ArrayAdapter{
 
 
         if (deviceID == 0) //heater
-            holder.ANIMATION.setBackgroundColor(Color.GREEN);
+        {
+            //ImageView imageView = (ImageView)row.findViewById(R.id.animation_item_image);
+            //imageView.setBackgroundResource(R.drawable.batteryanimation);
+            //batteryani = (AnimationDrawable) imageView.getBackground();
+            //batteryani.start();
+
+            holder.ANIMATION.setBackgroundResource(R.drawable.batteryanimation);
+            batteryani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            batteryani.start();
+
+        }
         else if (deviceID == 1) //dishwasher
-            holder.ANIMATION.setBackgroundColor(Color.YELLOW);
+        {
+            holder.ANIMATION.setBackgroundResource(R.drawable.batteryanimation);
+            batteryani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            batteryani.start();
+        }
         else if (deviceID == 2) //charger
-            holder.ANIMATION.setBackgroundColor(Color.RED);
+        {
+            holder.ANIMATION.setBackgroundResource(R.drawable.kettleanimation);
+            kettleani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            kettleani.start();
+        }
         else if (deviceID == 3)//fridge
-            holder.ANIMATION.setBackgroundColor(Color.BLUE);
+        {
+            holder.ANIMATION.setBackgroundResource(R.drawable.kettleanimation);
+            kettleani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            kettleani.start();
+        }
 
         return row;
     }
