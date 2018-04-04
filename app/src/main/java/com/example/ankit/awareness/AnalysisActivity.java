@@ -21,16 +21,21 @@ import android.widget.Toast;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,6 +50,8 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
     //private Toolbar mToolbar;
 
     private TextView applianceName;
+    private TextView applianceTotal;
+    private TextView applianceSave;
 
     private Button refreshGraphButton;
 
@@ -78,18 +85,11 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         detector = new GestureDetectorCompat(this, this);
 
-        barChart.setDrawBarShadow(false);
-        barChart.setDrawValueAboveBar(true);
-        //barChart.setMaxVisibleValueCount(50);
-        //barChart.setVisibleXRange(0, 31);
-        barChart.setPinchZoom(false);
-        barChart.setDrawGridBackground(false);
-        barChart.setFitBars(false);
-        barChart.setBackgroundColor(Color.TRANSPARENT);
-
         String currentDevice = getIntent().getExtras().getString("DEVICENAME");
 
         applianceName = (TextView) findViewById(R.id.ApplianceName);
+        applianceTotal = (TextView) findViewById(R.id.ApplianceTotal);
+        applianceSave = (TextView) findViewById(R.id.ApplianceSave);
 
         //refreshGraphButton = (Button) findViewById(R.id.RefreshGraph);
 
@@ -190,6 +190,23 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         Log.d("GraphValues", "deviceStamp size is " + deviceStamp.size());
         Log.d("GraphValues", "deviceData size is " + deviceData.size());
 
+        double total = 0;
+
+        for(int i = 0; i < deviceData.size(); i++)
+            total += (deviceData.elementAt(i)/3600);
+
+        boolean highRate = false;
+
+        if(total > 36)
+            highRate = true;
+
+        applianceTotal.setText("Total: " + total + "kW");
+
+        if(!highRate)
+            applianceSave.setText("You can save " + ((total/10) * 5.91)+ "$ by reducing just 10% of your " + currentDevice);
+        else
+            applianceSave.setText("You can save " + ((36 * 5.91) + ((total-36) * 9.12)) + "$ by reducing just 10% of your " + currentDevice);
+
         int totalDays = 0;
         int totalHours = 24;
 
@@ -265,6 +282,20 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         data.setBarWidth(0.9f);
 
         barChart.setData(data);
+        barChart.getData().setDrawValues(true);
+
+        barChart.setDrawBarShadow(false);
+        barChart.setDrawValueAboveBar(true);
+        barChart.setPinchZoom(false);
+        barChart.setDrawGridBackground(false);
+        barChart.setFitBars(false);
+        barChart.setBackgroundColor(Color.TRANSPARENT);
+        barChart.getXAxis().setTextColor(Color.WHITE);
+        barChart.getAxisLeft().setTextColor(Color.WHITE);
+        barChart.getAxisRight().setTextColor(Color.WHITE);
+        barChart.getLegend().setEnabled(false);
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        barChart.getDescription().setEnabled(false);
 
         String[] axisData;
 
@@ -281,7 +312,11 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new MyXAxisValueFormatter(axisData));
 
+        ////YAxis yAxis = barChart.getAxisLeft();
+        ///yAxis.setValueFormatter(new MyYAxisValueFormatter());
 
+
+        //barChart.setValueFormatter(new MyYAxisValueFormatter());
 
 
         /*
@@ -485,5 +520,99 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         }
 
     }
+
+
+
+    public class MyYAxisValueFormatter implements IValueFormatter {
+
+        private DecimalFormat mFormat;
+
+        public MyYAxisValueFormatter() {
+            // format values to 1 decimal digit
+            mFormat = new DecimalFormat("###,###,##0.0");
+        }
+
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            // "value" represents the position of the label on the axis (x or y)
+            if(value > 0) {
+                return mFormat.format(value);
+            } else {
+                return "";
+            }
+        }
+    }
+
+
+    /*
+    public class MyYAxisValueFormatter implements IAxisValueFormatter {
+
+        private DecimalFormat mFormat;
+
+        public MyYAxisValueFormatter() {
+            // format values to 1 decimal digit
+            mFormat = new DecimalFormat("###,###,##0.0");
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            // "value" represents the position of the label on the axis (x or y)
+            String val = "";
+
+            if(value != 0)
+            {
+                val = String.valueOf(value);
+            }
+            return mFormat.format(value) + " $";
+        }
+
+        /** this is only needed if numbers are returned, else return 0 */
+        /*
+        @Override
+        public int getDecimalDigits() { return 1; }
+        */
+    //}
+
+
+    /*
+    private class MyValueFormatter implements IAxisValueFormatter {
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            // write your logic here
+            if(value > 0)
+                return value+"";
+            else
+                return "";
+        }
+    }
+    */
+
+    /*
+    public class MyYAxisValueFormatter implements IAxisValueFormatter {
+
+        private DecimalFormat mFormat;
+
+        public MyYAxisValueFormatter() {
+            mFormat = new DecimalFormat("###,###,##0");
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            //String val = ""
+            String val = "";
+
+            if (value != 0)
+            {
+                val = String.valueOf(value);
+            }
+
+            return mFormat.format(val);
+        }
+
+        /** this is only needed if numbers are returned, else return 0 */
+    /*@Override
+    public int getDecimalDigits() { return 1; }*/
+    //}
 }
 
