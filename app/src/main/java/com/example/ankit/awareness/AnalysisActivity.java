@@ -200,12 +200,12 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         if(total > 36)
             highRate = true;
 
-        applianceTotal.setText("Total: " + total + "kW");
+        applianceTotal.setText("Total: " + String.format("%.2f", total) + "kW");
 
         if(!highRate)
-            applianceSave.setText("You can save " + ((total/10) * 5.91)+ "$ by reducing just 10% of your " + currentDevice);
+            applianceSave.setText("You can save " + String.format("%.2f", ((total/10) * 5.91))+ "$ by reducing just 10% of your " + currentDevice);
         else
-            applianceSave.setText("You can save " + ((36 * 5.91) + ((total-36) * 9.12)) + "$ by reducing just 10% of your " + currentDevice);
+            applianceSave.setText("You can save " + String.format("%.2f", ((36 * 5.91) + ((total-36) * 9.12))) + "$ by reducing just 10% of your " + currentDevice);
 
         int totalDays = 0;
         int totalHours = 24;
@@ -242,7 +242,8 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
             for(int i = 0; i < totalDays; i++)
             {
                 Log.d("GraphValues", "Day value " + thisMonth.get(i));
-                barEntries.add(new BarEntry(i, thisMonth.get(i)));
+
+                barEntries.add(new BarEntry(i, (thisMonth.get(i)/3600)));
             }
 
             Log.d("GraphValues", "thisMonth values printed");
@@ -261,7 +262,7 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
             for(int i = 0; i < totalHours; i++)
             {
                 Log.d("GraphValues", "Day value " + thisDay.get(i));
-                barEntries.add(new BarEntry(i, thisDay.get(i)));
+                barEntries.add(new BarEntry(i, (thisDay.get(i)/3600)));
             }
         }
 
@@ -296,6 +297,10 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         barChart.getLegend().setEnabled(false);
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getDescription().setEnabled(false);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getAxisLeft().setDrawAxisLine(false);
 
         String[] axisData;
 
@@ -311,6 +316,9 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new MyXAxisValueFormatter(axisData));
+        xAxis.setDrawAxisLine(false);
+
+        data.setValueFormatter(new MyYValueFormatter());
 
         ////YAxis yAxis = barChart.getAxisLeft();
         ///yAxis.setValueFormatter(new MyYAxisValueFormatter());
@@ -523,21 +531,24 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
 
 
-    public class MyYAxisValueFormatter implements IValueFormatter {
+    public class MyYValueFormatter implements IValueFormatter {
 
         private DecimalFormat mFormat;
 
-        public MyYAxisValueFormatter() {
+        public MyYValueFormatter() {
             // format values to 1 decimal digit
-            mFormat = new DecimalFormat("###,###,##0.0");
+            mFormat = new DecimalFormat("###,###,###.##");
         }
 
         @Override
         public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
             // "value" represents the position of the label on the axis (x or y)
-            if(value > 0) {
+            if(value > 0)
+            {
+                Log.d("Formatter", value + " returned");
                 return mFormat.format(value);
-            } else {
+            } else
+            {
                 return "";
             }
         }
