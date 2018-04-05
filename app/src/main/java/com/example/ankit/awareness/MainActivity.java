@@ -265,7 +265,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                             // email is not verified,
                             FirebaseAuth.getInstance().signOut();
 
-                            Toast.makeText(MainActivity.this, "Email not verified", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(android.R.id.content), "Email not verified", Snackbar.LENGTH_LONG).show();
+
+
+                            //Toast.makeText(MainActivity.this, "Email not verified", Toast.LENGTH_SHORT).show();
 
                             //restart this activity
                             Intent intent = new Intent(MainActivity.this, MainActivity.class);

@@ -3,6 +3,7 @@ package com.example.ankit.awareness;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -116,7 +117,9 @@ public class AddDeviceActivity extends AppCompatActivity implements GestureDetec
                         {
                             if(dataSnapshot.child("linked").getValue().toString().equals("0"))
                             {
-                                Toast.makeText(getApplicationContext(), "Device linked", Toast.LENGTH_LONG).show();
+                                Snackbar.make(findViewById(android.R.id.content), "Device linked", Snackbar.LENGTH_LONG).show();
+
+                                //Toast.makeText(getApplicationContext(), "Device linked", Toast.LENGTH_LONG).show();
 
                                 SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = myPref.edit();
@@ -126,13 +129,26 @@ public class AddDeviceActivity extends AppCompatActivity implements GestureDetec
                                 verifyState(device);
                             }
                             else
-                                Toast.makeText(getApplicationContext(),"Device already linked with an account", Toast.LENGTH_LONG).show();
+                            {
+                                Snackbar.make(findViewById(android.R.id.content), "Device already linked with an account", Snackbar.LENGTH_LONG).show();
+                                //Toast.makeText(getApplicationContext(), "Device already linked with an account", Toast.LENGTH_LONG).show();
+                            }
                         }
                         else
-                            Toast.makeText(getApplicationContext(),"Incorrect device password", Toast.LENGTH_LONG).show();
+                        {
+                            Snackbar.make(findViewById(android.R.id.content), "Incorrect device password", Snackbar.LENGTH_LONG).show();
+
+                            //Toast.makeText(getApplicationContext(), "Incorrect device password", Toast.LENGTH_LONG).show();
+
+                        }
                     }
                     else
-                        Toast.makeText(getApplicationContext(),"Device doesn't exist", Toast.LENGTH_LONG).show();
+                    {
+                        Snackbar.make(findViewById(android.R.id.content), "Device doesn't exist", Snackbar.LENGTH_LONG).show();
+
+
+                        //Toast.makeText(getApplicationContext(), "Device doesn't exist", Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 @Override
