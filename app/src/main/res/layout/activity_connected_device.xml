@@ -18,7 +18,7 @@
         <ListView
             android:id="@+id/DeviceListConnected"
             android:layout_width="450dp"
-            android:layout_height="250dp"
+            android:layout_height="300dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:textColor="@android:color/white"
@@ -40,7 +40,7 @@
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechartConnected"
             android:layout_width="450dp"
-            android:layout_height="250dp"
+            android:layout_height="300dp"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/DeviceListConnected">
 
