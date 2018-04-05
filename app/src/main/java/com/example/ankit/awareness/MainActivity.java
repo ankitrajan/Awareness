@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -91,7 +92,37 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         detector = new GestureDetectorCompat(this, this);
 
-        SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
+        final SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
+
+
+        if(loginPreferences.getString("SWITCHSTATUS","").equals("on"))
+            checkRememberMe.setChecked(true);
+        else if(loginPreferences.getString("SWITCHSTATUS","").equals("off"))
+            checkRememberMe.setChecked(false);
+        /*
+        else
+        {
+            SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
+            loginPreferences.edit().clear().commit();
+            loginPreferences.edit().putString("SWITCHSTATUS", "off").commit();
+        }
+        */
+
+        checkRememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked)
+                {
+                    loginPreferences.edit().clear().commit();
+                    loginPreferences.edit().putString("SWITCHSTATUS", "off").commit();
+                }
+                else if (isChecked)
+                {
+                    loginPreferences.edit().putString("SWITCHSTATUS", "on").commit();
+                }
+            }
+        });
+
         etUserName.setText(loginPreferences.getString(USERNAME, ""));
         etPassword.setText(loginPreferences.getString(PASSWORD, ""));
 
@@ -127,6 +158,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 {
                     if (firebaseAuth.getCurrentUser().isEmailVerified())
                     {
+                        if(checkRememberMe.isChecked())
+                            loginPreferences.edit().putString(USERNAME, emailText.getText().toString()).putString(PASSWORD, passwordText.getText().toString()).commit();
+
                         databaseReference = FirebaseDatabase.getInstance().getReference();
 
                         final String currentUser = firebaseAuth.getCurrentUser().getUid().toString();
@@ -244,17 +278,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                             } else if (null == strPassword || strPassword.length() == 0)
                             {
                                 etPassword.requestFocus();
-                            } else
-                            {
-                                if (checkRememberMe.isChecked())
-                                {
-                                    SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
-                                    loginPreferences.edit().putString(USERNAME, strUserName).putString(PASSWORD, strPassword).commit();
-                                } else
-                                {
-                                    SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
-                                    loginPreferences.edit().clear().commit();
-                                }
                             }
 
                             // user is verified, so logged in, which will be detected by the AuthStateListener
