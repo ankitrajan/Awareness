@@ -75,15 +75,6 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connected_device);
 
-        ImageView imageView = (ImageView)findViewById(R.id.batteryanimation);
-        imageView.setBackgroundResource(R.drawable.batteryanimation);
-        batteryani = (AnimationDrawable) imageView.getBackground();
-
-        ImageView imageView1 = (ImageView)findViewById(R.id.kettleanimation);
-        imageView1.setBackgroundResource(R.drawable.kettleanimation);
-        kettleani = (AnimationDrawable) imageView1.getBackground();
-
-
         if( getIntent().getExtras() != null)
         {
             if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("ConnectedDeviceActivity"))
@@ -125,10 +116,6 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
                     case R.id.monthly_consumption:
                         goToMyAccountActivity();
-                        return true;
-
-                    case R.id.settings:
-                        startActivity(new Intent(ConnectedDeviceActivity.this, SettingsActivity.class));
                         return true;
 
                     case R.id.configure_device:
@@ -253,14 +240,6 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
         displayList();
     }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        kettleani.start();
-        batteryani.start();
-    }
-
 
     void displayList()
     {
@@ -459,6 +438,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
     void goToAddDeviceActivity()
     {
         Intent intent = new Intent(ConnectedDeviceActivity.this, AddDeviceActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
         startActivity(intent);
 }
 
@@ -491,7 +471,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
     void signOut()
     {
         userSignOut();
-        startActivity(new Intent(ConnectedDeviceActivity.this, MainActivity.class));
+        Intent intent = new Intent(ConnectedDeviceActivity.this, MainActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
+        startActivity(intent);
         Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
     }
 

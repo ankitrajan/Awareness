@@ -105,10 +105,6 @@ public class LiveActivity extends AppCompatActivity {
                         goToMyAccountActivity();
                         return true;
 
-                    case R.id.settings:
-                        startActivity(new Intent(LiveActivity.this, SettingsActivity.class));
-                        return true;
-
                     case R.id.configure_device:
                         goToAddDeviceActivity();
                         return true;
@@ -308,8 +304,10 @@ public class LiveActivity extends AppCompatActivity {
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
 
+                    /*
                     if(dataSnapshot.getValue().toString().equals("connected"))
                         Toast.makeText(getApplicationContext(),deviceName + " is " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+                    */
                 }
             }
 
@@ -319,7 +317,9 @@ public class LiveActivity extends AppCompatActivity {
                 if(dataSnapshot.getKey().toString().equals("status"))
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
-                    Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+
+                    if(dataSnapshot.getValue().toString().equals("disconnected"))
+                        Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
                     /////setDataText();
 
                     if(dataSnapshot.getValue().toString().equals("disconnected")) {
@@ -387,6 +387,7 @@ public class LiveActivity extends AppCompatActivity {
     void goToAddDeviceActivity()
     {
         Intent intent = new Intent(LiveActivity.this, AddDeviceActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "LiveActivity");
         startActivity(intent);
     }
 
@@ -419,7 +420,9 @@ public class LiveActivity extends AppCompatActivity {
     void signOut()
     {
         userSignOut();
-        startActivity(new Intent(LiveActivity.this, MainActivity.class));
+        Intent intent = new Intent(LiveActivity.this, MainActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "LiveActivity");
+        startActivity(intent);
         Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
     }
 

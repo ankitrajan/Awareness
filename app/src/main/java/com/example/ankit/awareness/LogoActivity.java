@@ -24,6 +24,14 @@ public class LogoActivity extends AppCompatActivity {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        if(getIntent().getExtras() != null)
+        {
+            if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("MainActivity"))
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            else
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+        }
+
         mainButton = (Button) findViewById(R.id.Main);
         signUpButton = (Button) findViewById(R.id.SignUp);
 

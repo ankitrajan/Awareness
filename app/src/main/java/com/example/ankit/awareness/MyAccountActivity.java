@@ -84,7 +84,6 @@ public class MyAccountActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -114,10 +113,6 @@ public class MyAccountActivity extends AppCompatActivity {
                         Intent intent = new Intent(MyAccountActivity.this, MyAccountActivity.class);
                         intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
                         startActivity(intent);
-                        return true;
-
-                    case R.id.settings:
-                        startActivity(new Intent(MyAccountActivity.this, SettingsActivity.class));
                         return true;
 
                     case R.id.configure_device:
@@ -418,6 +413,7 @@ public class MyAccountActivity extends AppCompatActivity {
     void goToAddDeviceActivity()
     {
         Intent intent = new Intent(MyAccountActivity.this, AddDeviceActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
         startActivity(intent);
     }
 
@@ -448,7 +444,9 @@ public class MyAccountActivity extends AppCompatActivity {
     void signOut()
     {
         userSignOut();
-        startActivity(new Intent(MyAccountActivity.this, MainActivity.class));
+        Intent intent = new Intent(MyAccountActivity.this, MainActivity.class);
+        intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
+        startActivity(intent);
         Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
     }
 

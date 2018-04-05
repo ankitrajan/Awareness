@@ -19,12 +19,6 @@
         android:icon="@mipmap/monthly"/>
 
     <item
-        android:id="@+id/settings"
-        android:title="Settings"
-        android:icon="@mipmap/settings"
-        app:showAsAction=""/>
-
-    <item
         android:id="@+id/sign_out"
         android:title="Sign Out"
         android:icon="@mipmap/signout"/>
