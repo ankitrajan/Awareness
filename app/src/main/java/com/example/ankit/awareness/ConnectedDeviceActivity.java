@@ -429,7 +429,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         pieChartConnected.getLegend().setTextColor(Color.WHITE); //In case of error delete, changes font to white
         pieChartConnected.setHoleRadius(80);                    //In case of error delete, changing the chart radius
         pieChartConnected.setDrawEntryLabels(false);            //showing description under the percentage for piechart
-
+        dataSet.setDrawValues(false);
 
         pieChartConnected.setData(data);
 
