@@ -7,11 +7,14 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -38,7 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener
 {
 
     private FirebaseAuth firebaseAuth;
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
+    private GestureDetectorCompat detector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -66,13 +71,25 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setContentView(R.layout.activity_main);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+
+        if(getIntent().getExtras() != null)
+        {
+            if(getIntent().getExtras().getString("STARTINGACTIVITY").equals("ResetActivity"))
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+            else
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        }
+        else
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         checkRememberMe = (Switch) findViewById(R.id.checkbox);
         etUserName = (EditText) findViewById(R.id.EmailField);
         etPassword = (EditText) findViewById(R.id.PasswordField);
+
+        detector = new GestureDetectorCompat(this, this);
 
         SharedPreferences loginPreferences = getSharedPreferences(SPF_NAME, Context.MODE_PRIVATE);
         etUserName.setText(loginPreferences.getString(USERNAME, ""));
@@ -201,10 +218,8 @@ public class MainActivity extends AppCompatActivity
                 public void onComplete(@NonNull Task<AuthResult> task)
                 {
                     if (!(task.isSuccessful()))
-                    {Toast.makeText(MainActivity.this, "Am everywhere", Toast.LENGTH_LONG).show();
+                    {
                         try {
-
-
                             throw task.getException();
                         } catch(FirebaseAuthInvalidUserException e) {
                             emailText.setError("Email incorrect");
@@ -292,5 +307,50 @@ public class MainActivity extends AppCompatActivity
     {
         Intent intent = new Intent(MainActivity.this, ResetActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+        if(e2.getX() > e1.getX())
+        {
+            Intent intent = new Intent(MainActivity.this, LogoActivity.class);
+            intent.putExtra("STARTINGACTIVITY", "MainActivity");
+            startActivity(intent);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        detector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 }

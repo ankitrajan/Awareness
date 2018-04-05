@@ -27,24 +27,14 @@
             android:name=".MyAccountActivity"
             android:label=""
             android:theme="@style/account">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ankit.awareness.ConnectedDeviceActivity" />
         </activity>
         <activity
             android:name=".AnalysisActivity"
             android:hardwareAccelerated="true"
             android:label=""></activity>
         <activity
-            android:name=".SettingsActivity"
-            android:label=""
-            android:theme="@style/account" />
-        <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ankit.awareness.MainActivity" />
         </activity>
         <activity
             android:name=".ResetActivity"

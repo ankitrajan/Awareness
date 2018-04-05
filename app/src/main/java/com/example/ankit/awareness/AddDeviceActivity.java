@@ -3,9 +3,12 @@ package com.example.ankit.awareness;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
-public class AddDeviceActivity extends AppCompatActivity {
+public class AddDeviceActivity extends AppCompatActivity implements GestureDetector.OnGestureListener{
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -38,6 +41,8 @@ public class AddDeviceActivity extends AppCompatActivity {
     private EditText devicePasswordText;
 
     private String currentUserID;
+
+    private GestureDetectorCompat detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,6 +59,8 @@ public class AddDeviceActivity extends AppCompatActivity {
 
         deviceText = (EditText) findViewById(R.id.DeviceField);
         devicePasswordText = (EditText) findViewById(R.id.DevicePasswordField);
+
+        detector = new GestureDetectorCompat(this, this);
 
         final String currentUser = firebaseAuth.getCurrentUser().getUid().toString();
 
@@ -164,5 +171,69 @@ public class AddDeviceActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(AddDeviceActivity.this, ConnectedDeviceActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+        if(e2.getX() > e1.getX())
+        {
+            String callingActivity = getIntent().getExtras().getString("STARTINGACTIVITY");
+
+            if(callingActivity.equals("ConnectedDeviceActivity"))
+            {
+                Intent intent = new Intent(AddDeviceActivity.this, ConnectedDeviceActivity.class);
+                //intent.putExtra("STARTINGACTIVITY", "AddDeviceActivity");
+                startActivity(intent);
+                return true;
+            }
+            else if(callingActivity.equals("LiveActivity"))
+            {
+                Intent intent = new Intent(AddDeviceActivity.this, LiveActivity.class);
+                intent.putExtra("STARTINGACTIVITY", "AddDeviceActivity");
+                startActivity(intent);
+                return true;
+            }
+            else
+            {
+                Intent intent = new Intent(AddDeviceActivity.this, MyAccountActivity.class);
+                //intent.putExtra("STARTINGACTIVITY", "AddDeviceActivity");
+                startActivity(intent);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        detector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 }

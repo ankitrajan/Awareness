@@ -16,7 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -419,7 +419,7 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         newIntent.putExtra("REFRESH", "Yes");
         startActivity(newIntent);
 
-        Toast.makeText(getApplicationContext(), "Refreshing", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Refreshing", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -487,7 +487,7 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_toolbar_my_account, menu);
+        inflater.inflate(R.menu.menu_toolbar_my_account2, menu);
         return true;
     }
 

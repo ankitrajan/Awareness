@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 
-public class CreateAccountActivity extends AppCompatActivity
+public class CreateAccountActivity extends AppCompatActivity implements GestureDetector.OnGestureListener
 {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -37,6 +40,8 @@ public class CreateAccountActivity extends AppCompatActivity
     private EditText emailText;
     private EditText passwordText;
     //private EditText phoneNumberText;
+
+    private GestureDetectorCompat detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,6 +62,8 @@ public class CreateAccountActivity extends AppCompatActivity
         emailText = (EditText) findViewById(R.id.EmailField);
         passwordText = (EditText) findViewById(R.id.PasswordField);
         //phoneNumberText = (EditText) findViewById(R.id.PhoneNumberField);
+
+        detector = new GestureDetectorCompat(this, this);
 
         createButton.setOnClickListener(new View.OnClickListener()
         {
@@ -145,5 +152,50 @@ public class CreateAccountActivity extends AppCompatActivity
            // passwordText.setError("Password cannot be empty");
 
             Toast.makeText(CreateAccountActivity.this, "Field(s) cannot be left empty", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+        if(e2.getX() > e1.getX())
+        {
+            Intent intent = new Intent(CreateAccountActivity.this, LogoActivity.class);
+            intent.putExtra("STARTINGACTIVITY", "CreateAccountActivity");
+            startActivity(intent);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        detector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 }
