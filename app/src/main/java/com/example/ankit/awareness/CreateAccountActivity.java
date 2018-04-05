@@ -106,7 +106,9 @@ public class CreateAccountActivity extends AppCompatActivity implements GestureD
                                         {
                                             if (task.isSuccessful())
                                             {
-                                                Toast.makeText(CreateAccountActivity.this, "Verification email was sent", Toast.LENGTH_LONG).show();
+                                                Snackbar.make(findViewById(android.R.id.content), "Verification email was sent", Snackbar.LENGTH_LONG).show();
+
+                                                //Toast.makeText(CreateAccountActivity.this, "Verification email was sent", Toast.LENGTH_LONG).show();
 
                                                 String newUser = user.getUid().toString();
 
@@ -137,7 +139,9 @@ public class CreateAccountActivity extends AppCompatActivity implements GestureD
                                                // emailText.setError("Email could not be verified");
                                               //  View view = findViewById(android.R.id.content);
                                                // Snackbar.make(view, "Deleted...", Snackbar.LENGTH_LONG).show();
-                                                Toast.makeText(CreateAccountActivity.this, "Email could not be verified", Toast.LENGTH_LONG).show();
+                                                Snackbar.make(findViewById(android.R.id.content), "Email could not be verified", Snackbar.LENGTH_LONG).show();
+
+                                                //Toast.makeText(CreateAccountActivity.this, "Email could not be verified", Toast.LENGTH_LONG).show();
                                                 finish();
                                             }
                                         }
@@ -148,10 +152,16 @@ public class CreateAccountActivity extends AppCompatActivity implements GestureD
                     });
         }
         else
+        {
+            Snackbar.make(findViewById(android.R.id.content), "Field(s) cannot be left empty", Snackbar.LENGTH_LONG).show();
+
+            //Toast.makeText(CreateAccountActivity.this, "Field(s) cannot be left empty", Toast.LENGTH_LONG).show();
+
+        }
+
            // emailText.setError("Email cannot be empty");
            // passwordText.setError("Password cannot be empty");
 
-            Toast.makeText(CreateAccountActivity.this, "Field(s) cannot be left empty", Toast.LENGTH_LONG).show();
     }
 
     @Override

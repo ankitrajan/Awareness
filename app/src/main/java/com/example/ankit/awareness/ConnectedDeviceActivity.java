@@ -9,6 +9,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -474,7 +475,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         Intent intent = new Intent(ConnectedDeviceActivity.this, MainActivity.class);
         intent.putExtra("STARTINGACTIVITY", "ConnectedDeviceActivity");
         startActivity(intent);
-        Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
+
+        Snackbar.make(findViewById(android.R.id.content), "Signed out", Snackbar.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
     }
 
     private void userSignOut()

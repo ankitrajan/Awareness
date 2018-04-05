@@ -8,6 +8,7 @@ import android.graphics.ColorFilter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -447,7 +448,11 @@ public class MyAccountActivity extends AppCompatActivity {
         Intent intent = new Intent(MyAccountActivity.this, MainActivity.class);
         intent.putExtra("STARTINGACTIVITY", "MyAccountActivity");
         startActivity(intent);
-        Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
+
+        Snackbar.make(findViewById(android.R.id.content), "Signed out", Snackbar.LENGTH_LONG).show();
+
+
+        //Toast.makeText(getApplicationContext(), "Signed out", Toast.LENGTH_LONG).show();
     }
 
     @Override
