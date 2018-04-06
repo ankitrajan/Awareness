@@ -367,6 +367,88 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return total;
     }
 
+
+
+    public double getSpecificDayDataTotal(String queryDevice)
+    {
+        Calendar currentDate = Calendar.getInstance();
+        int year = currentDate.get(Calendar.YEAR)%1000;
+        int month = currentDate.get(Calendar.MONTH) + 1;
+        int day = currentDate.get(Calendar.DAY_OF_MONTH);
+
+        Vector<Double>  specifiedData = new Vector<Double>();
+        String selectQuery = "SELECT value FROM " + TABLE_DATA + " WHERE name = \"" + queryDevice + "\" AND year = \"" + year + "\" AND month = \"" + month + "\" AND day = \"" + day +"\" ";
+        //String selectQuery = "SELECT DISTINCT(name) FROM " + TABLE_DATA + " WHERE year = \"" + year + "\" AND month = \"" +  month + "\" AND day = \"" + day + "\" ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            int myPosition = 0;
+
+            do
+            {
+                specifiedData.add(myPosition++, cursor.getDouble(0));
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        double total = 0;
+
+        for(int i = 0; i < specifiedData.size(); i++)
+            total += specifiedData.elementAt(i);
+
+        return total;
+    }
+
+    public double getSpecificMonthDataTotal(String queryDevice)
+    {
+        Calendar currentDate = Calendar.getInstance();
+        int year = currentDate.get(Calendar.YEAR)%1000;
+        int month = currentDate.get(Calendar.MONTH) + 1;
+
+        Vector<Double>  specifiedData = new Vector<Double>();
+        String selectQuery = "SELECT value FROM " + TABLE_DATA + " WHERE name = \"" + queryDevice + "\" AND year = \"" + year + "\" AND month = \"" + month + "\" ";
+        //String selectQuery = "SELECT DISTINCT(name) FROM " + TABLE_DATA + " WHERE year = \"" + year + "\" AND month = \"" +  month + "\" AND day = \"" + day + "\" ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            int myPosition = 0;
+
+            do
+            {
+                specifiedData.add(myPosition++, cursor.getDouble(0));
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        double total = 0;
+
+        for(int i = 0; i < specifiedData.size(); i++)
+            total += specifiedData.elementAt(i);
+
+        return total;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public Vector<String> getAllDevice()
     {
         Vector<String>  allDevice = new Vector<String>();

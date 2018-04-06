@@ -417,7 +417,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
         for(int i = 0; i < allDayDevice.size(); i++)
         {
-            dayDeviceData.add(myDatabase.getSpecificDataTotal(allDayDevice.elementAt(i)));
+            dayDeviceData.add(myDatabase.getSpecificDayDataTotal(allDayDevice.elementAt(i)));
 
             total += dayDeviceData.elementAt(i);
 
