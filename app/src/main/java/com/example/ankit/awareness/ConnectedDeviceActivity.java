@@ -436,7 +436,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
             yValues.add(new PieEntry(dayDeviceData.elementAt(i).floatValue(), allDayDevice.elementAt(i)));
         }
 
-        dailyTotal.setText(String.format("%.2f", total));
+        dailyTotal.setText(String.format("%.2f", total/3600));
 
         pieChartConnected.animateY(0, Easing.EasingOption.EaseInOutCubic); ////////////////////////////////////////////////
 

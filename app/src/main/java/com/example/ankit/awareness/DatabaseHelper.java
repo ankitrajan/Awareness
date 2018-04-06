@@ -15,13 +15,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     private static double totalConsumption = 0;
     //private static double lastStamp = 0;
     //private static String lastName = "";
-    private static String[] lookupName = {"kettle", "mixer", "panini press", "laptop charger"};
-    private static double[] lookup = {1000, 100, 620, 45};
+    private static String[] lookupName = {"kettle", "monitor", "mixer", "unknown"};
+    private static double[] lookup = {1000, 140, 130, 45};
 
     // Database Name
     private static final String DATABASE_NAME = "Data Manager";
@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_DATA = "data";
     private static final String TABLE_DEVICE = "device";
 
-    private static final int DATABASE_SIZE = 200;
+    private static final int DATABASE_SIZE = 200000;
 
     //private static int currentSize = 0;
 
@@ -235,6 +235,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             db.insert(TABLE_DATA, null, values);
         }
+
+        cursor.close();
+        sameCursor.close();
+        stampCursor.close();
+
         db.close();
     }
 
@@ -288,6 +293,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+
+        cursor.close();
+
         db.close();
 
         return allStamp;
@@ -310,6 +318,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 specifiedStamp.add(myPosition++, cursor.getLong(0));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
 
         db.close();
 
@@ -334,6 +344,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         db.close();
 
         return specifiedData;
@@ -356,6 +368,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 specifiedData.add(myPosition++, cursor.getDouble(0));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
 
         db.close();
 
@@ -393,6 +407,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         db.close();
 
         double total = 0;
@@ -425,6 +441,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 specifiedData.add(myPosition++, cursor.getDouble(0));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
 
         db.close();
 
@@ -467,6 +485,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         db.close();
 
         Log.d("MyAccountActivity", "Returned vector size = " + allDevice.size());
@@ -491,6 +511,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 allStatusDevice.add(myPosition++, cursor.getString(0));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
 
         db.close();
 
@@ -526,6 +548,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         db.close();
 
         for(int i = 0; i < allDayDevice.size(); i++)
@@ -560,6 +584,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         db.close();
 
         for(int i = 0; i < allMonthDevice.size(); i++)
@@ -593,6 +619,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
 
         db.close();
 
@@ -617,6 +644,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         db.close();
 
         return allData;
@@ -640,6 +669,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 allData.add(myPosition++, cursor.getDouble(0));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
 
         db.close();
 

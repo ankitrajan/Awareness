@@ -159,7 +159,15 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     if (firebaseAuth.getCurrentUser().isEmailVerified())
                     {
                         if(checkRememberMe.isChecked())
+                        {
                             loginPreferences.edit().putString(USERNAME, emailText.getText().toString()).putString(PASSWORD, passwordText.getText().toString()).commit();
+                            loginPreferences.edit().putString("SWITCHSTATUS", "on").commit();
+                        }
+                        else
+                        {
+                            loginPreferences.edit().clear().commit();
+                            loginPreferences.edit().putString("SWITCHSTATUS", "off").commit();
+                        }
 
                         databaseReference = FirebaseDatabase.getInstance().getReference();
 

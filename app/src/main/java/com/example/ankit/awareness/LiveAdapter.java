@@ -123,6 +123,7 @@ public class LiveAdapter extends ArrayAdapter{
             holder.APPLIANCE = (TextView) row.findViewById(R.id.live_item_text);
             holder.ANIMATION = (ImageView) row.findViewById(R.id.live_item_image);
 
+            /*
             holder.APPLIANCE.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -138,6 +139,7 @@ public class LiveAdapter extends ArrayAdapter{
                     c.startActivity(intent);
                 }
             });
+            */
 
             row.setTag(holder);
         } else
