@@ -174,6 +174,8 @@ public class AnalysisAdapter extends ArrayAdapter{
             holder.ANIMATION.setBackgroundColor(Color.RED);
         else if (deviceID == 3)//fridge
             holder.ANIMATION.setBackgroundColor(Color.BLUE);
+        else if (deviceID == -1)
+            holder.ANIMATION.setBackgroundColor(Color.parseColor("#000C1F"));
 
         return row;
     }
