@@ -125,11 +125,14 @@ public class AnalysisAdapter extends ArrayAdapter{
 
                     int index = (int) v.getTag();
 
-                    Log.d("Adapter", appliance.get(index) + " send to analysis with position " + index);
-                    Intent intent= new Intent(c, AnalysisActivity.class);
-                    intent.putExtra("DEVICENAME", (String) appliance.get(index));
-                    intent.putExtra("STARTINGACTIVITY", callingActivity);
-                    c.startActivity(intent);
+                    if(!(appliance.get(index).equals("No Connected Device")))
+                    {
+                        Log.d("Adapter", appliance.get(index) + " send to analysis with position " + index);
+                        Intent intent = new Intent(c, AnalysisActivity.class);
+                        intent.putExtra("DEVICENAME", (String) appliance.get(index));
+                        intent.putExtra("STARTINGACTIVITY", callingActivity);
+                        c.startActivity(intent);
+                    }
 
                     //Send to FriendInfoActivity with proper information when name is clicked
                     /*

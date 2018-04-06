@@ -179,7 +179,10 @@ public class AddDeviceActivity extends AppCompatActivity implements GestureDetec
             databaseReference.child("Users").child(currentUserID).child("First Login").setValue(false);
             databaseReference.child("Users").child(currentUserID).child("Linked Device").setValue(deviceIdentification);
 
-            goToMyAccountActivity();
+            currentDevice.setText("Currently linked device: " + deviceIdentification);
+            Snackbar.make(findViewById(android.R.id.content), "Device Linked", Snackbar.LENGTH_LONG).show();
+
+            //goToMyAccountActivity();
         }
     }
 

@@ -202,10 +202,21 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
 
         applianceTotal.setText("Total: " + String.format("%.2f", total) + "kW");
 
-        if(!highRate)
-            applianceSave.setText("You can save " + String.format("%.2f", ((total/10) * 5.91))+ "$ by reducing just 10% of your " + currentDevice);
+
+        if(!currentDevice.equals("All"))
+        {
+            if (!highRate)
+                applianceSave.setText("You can save " + String.format("%.2f", ((total / 10) * 5.91)) + "$ by reducing 10% of your " + currentDevice + " usage");
+            else
+                applianceSave.setText("You can save " + String.format("%.2f", ((36 * 5.91) + ((total - 36) * 9.12))) + "$ by reducing 10% of your " + currentDevice + " usage");
+        }
         else
-            applianceSave.setText("You can save " + String.format("%.2f", ((36 * 5.91) + ((total-36) * 9.12))) + "$ by reducing just 10% of your " + currentDevice);
+        {
+            if (!highRate)
+                applianceSave.setText("You can save " + String.format("%.2f", ((total / 10) * 5.91)) + "$ by reducing 10% of your overall consumption");
+            else
+                applianceSave.setText("You can save " + String.format("%.2f", ((36 * 5.91) + ((total - 36) * 9.12))) + "$ by reducing 10% of your overall consumption");
+        }
 
         int totalDays = 0;
         int totalHours = 24;
