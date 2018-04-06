@@ -163,12 +163,10 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         Boolean firstLogin = myPref.getBoolean("First Login", true);
 
         if(!firstLogin) {
-            adapterConnected.add("All");
-            adapterConnected.notifyDataSetChanged();
+            adapterConnected.add("All", "disconnected");
         }
         else {
-            adapterConnected.add("No Connected Device");
-            adapterConnected.notifyDataSetChanged();
+            adapterConnected.add("No Connected Device", "disconnected");
         }
 
 
@@ -270,7 +268,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
         deviceListConnected.setAdapter(adapterConnected);
 
         // ListView Item Click Listener
-        /*
+
         deviceListConnected.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -305,7 +303,6 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
             }
 
         });
-        */
     }
 
     void collectDeviceData(String addedDevice)
@@ -339,7 +336,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                     if(!((((stamp%(100000000L))/1000000L) != day) || (((stamp%(10000000000L))/100000000L) != month) || (((stamp%(1000000000000L))/10000000000L) != year)))
                     {
                         if(!adapterConnected.isAlreadyInList(deviceName)) {
-                            adapterConnected.add(deviceName);
+                            adapterConnected.add(deviceName, "disconnected");
                             adapterConnected.notifyDataSetChanged();
                         }
                         //adapterConnected.remove(deviceName);
@@ -353,6 +350,17 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                 else if(dataSnapshot.getKey().toString().equals("status"))
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
+
+                    if(dataSnapshot.getValue().toString().equals("connected"))
+                    {
+                        adapterConnected.changeStatus(deviceName, "connected");
+                        adapterConnected.notifyDataSetChanged();
+                    }
+                    else if(dataSnapshot.getValue().toString().equals("disconnected"))
+                    {
+                        adapterConnected.changeStatus(deviceName, "disconnected");
+                        adapterConnected.notifyDataSetChanged();
+                    }
 
                     /*
                     if(dataSnapshot.getValue().toString().equals("connected"))
@@ -368,6 +376,10 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
                     //////Toast.makeText(getApplicationContext(),deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+
+                    adapterConnected.changeStatus(deviceName, dataSnapshot.getValue().toString());
+                    adapterConnected.notifyDataSetChanged();
+
                     setDataText();
 
                     /*
