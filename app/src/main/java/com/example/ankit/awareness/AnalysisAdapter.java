@@ -3,6 +3,7 @@ package com.example.ankit.awareness;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ public class AnalysisAdapter extends ArrayAdapter{
     private List appliance = new ArrayList<>();
     private List animation = new ArrayList<>();
     private String callingActivity;
+
+    private AnimationDrawable connectedani;
 
     private String[] lookupName = {"heater", "dishwasher", "charger", "fridge"};
 
@@ -167,7 +170,11 @@ public class AnalysisAdapter extends ArrayAdapter{
 
 
         if (deviceID == 0) //heater
-            holder.ANIMATION.setBackgroundColor(Color.GREEN);
+        {
+            holder.ANIMATION.setBackgroundResource(R.drawable.connectedanimation);
+            connectedani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            connectedani.start();
+        }
         else if (deviceID == 1) //dishwasher
             holder.ANIMATION.setBackgroundColor(Color.YELLOW);
         else if (deviceID == 2) //charger

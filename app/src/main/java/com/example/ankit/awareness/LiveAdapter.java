@@ -29,6 +29,7 @@ public class LiveAdapter extends ArrayAdapter{
 
     private AnimationDrawable batteryani;
     private AnimationDrawable kettleani;
+    private AnimationDrawable monitorani;
 
     private String[] lookupName = {"kettle", "laptop charger", "mixer", "panini press"};
 
@@ -170,9 +171,9 @@ public class LiveAdapter extends ArrayAdapter{
         }
         else if (deviceID == 1) //dishwasher
         {
-            holder.ANIMATION.setBackgroundResource(R.drawable.batteryanimation);
-            batteryani = (AnimationDrawable) holder.ANIMATION.getBackground();
-            batteryani.start();
+            holder.ANIMATION.setBackgroundResource(R.drawable.monitoranimation);
+            monitorani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            monitorani.start();
         }
         else if (deviceID == 2) //charger
         {
