@@ -126,8 +126,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         etUserName.setText(loginPreferences.getString(USERNAME, ""));
         etPassword.setText(loginPreferences.getString(PASSWORD, ""));
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-
         firebaseAuth = FirebaseAuth.getInstance();
 
         Log.d(TAG,"connected to firebase");
