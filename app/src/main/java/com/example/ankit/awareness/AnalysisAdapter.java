@@ -23,7 +23,7 @@ public class AnalysisAdapter extends ArrayAdapter{
 
     private AnimationDrawable connectedani;
 
-    private String[] lookupName = {"heater", "dishwasher", "charger", "fridge"};
+    private String[] lookupName = {"kettle", "monitor", "mixer", "unknown"};
 
     private Context c;
 
@@ -39,14 +39,14 @@ public class AnalysisAdapter extends ArrayAdapter{
         return this.callingActivity;
     }
 
-    public void add(String newAppliance)
+    public void add(String newAppliance, String status)
     {
         if(newAppliance.equals("All") || newAppliance.equals("No Connected Device"))
         {
             Log.d("Adapter", newAppliance + " added with position " + -1);
 
             appliance.add(newAppliance);
-            animation.add(-1);
+            animation.add("-1");
 
             super.add(newAppliance);
             //super.add(-1);
@@ -67,7 +67,7 @@ public class AnalysisAdapter extends ArrayAdapter{
             //Log.d("Adapter", newAppliance + " added with position " + position);
 
             appliance.add(newAppliance);
-            animation.add(position);
+            animation.add(status);
 
             super.add(newAppliance);
             //super.add(position);
@@ -75,6 +75,18 @@ public class AnalysisAdapter extends ArrayAdapter{
     }
 
     public boolean isAlreadyInList(String testAppliance) { return this.appliance.contains(testAppliance);}
+
+
+    public void changeStatus(String applianceName, String newStatus)
+    {
+        int applianceIndex = appliance.indexOf(applianceName);
+
+        //Log.d("ImageConnected", "Appliance " + applianceName + "found at index " + applianceIndex + ". Appliance.size() = " + appliance.size() + " and Animation.size() = " + animation.size());
+
+        if(applianceIndex > -1)
+            animation.set(applianceIndex, newStatus);
+    }
+
 
     static class RowHolder
     {
@@ -166,16 +178,25 @@ public class AnalysisAdapter extends ArrayAdapter{
         //Display image
         //////////holder.ANIMATION.setImage();
 
-        int deviceID = (int) animation.get(position);
+        String deviceStatus = (String) animation.get(position);
 
 
-        if (deviceID == 0) //heater
+        if (deviceStatus.equals("connected")) //heater
         {
             holder.ANIMATION.setBackgroundResource(R.drawable.connectedanimation);
             connectedani = (AnimationDrawable) holder.ANIMATION.getBackground();
             connectedani.start();
         }
-        else if (deviceID == 1) //dishwasher
+        else if(deviceStatus.equals("disconnected"))
+        {
+            holder.ANIMATION.setBackgroundColor(Color.parseColor("#000C1F"));
+        }
+        else
+        {
+            holder.ANIMATION.setBackgroundColor(Color.parseColor("#000C1F"));
+        }
+
+            /*if (deviceID == 1) //dishwasher
             holder.ANIMATION.setBackgroundColor(Color.YELLOW);
         else if (deviceID == 2) //charger
             holder.ANIMATION.setBackgroundColor(Color.RED);
@@ -183,6 +204,7 @@ public class AnalysisAdapter extends ArrayAdapter{
             holder.ANIMATION.setBackgroundColor(Color.BLUE);
         else if (deviceID == -1)
             holder.ANIMATION.setBackgroundColor(Color.parseColor("#000C1F"));
+        */
 
         return row;
     }
