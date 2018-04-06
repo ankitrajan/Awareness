@@ -193,29 +193,33 @@ public class AnalysisActivity extends AppCompatActivity  implements GestureDetec
         double total = 0;
 
         for(int i = 0; i < deviceData.size(); i++)
-            total += (deviceData.elementAt(i)/3600);
+            total += (deviceData.elementAt(i)/3600000);
 
         boolean highRate = false;
 
         if(total > 36)
             highRate = true;
 
-        applianceTotal.setText("Total: " + String.format("%.2f", total) + "kW");
+        DecimalFormat newTotal = new DecimalFormat("###,###,###.######");
+
+        applianceTotal.setText("Total: " + newTotal.format(total) + "kWh");
+
+        //applianceTotal.setText("Total: " + String.format("%.4f", total) + "kW");
 
 
         if(!currentDevice.equals("All"))
         {
             if (!highRate)
-                applianceSave.setText("You can save " + String.format("%.2f", ((total / 10) * 5.91)) + "$ by reducing 10% of your " + currentDevice + " usage");
+                applianceSave.setText("You can save " + String.format("%.2f", ((total * 5.91)/100)) + "$ by reducing 10% of your " + currentDevice + " usage");
             else
-                applianceSave.setText("You can save " + String.format("%.2f", ((36 * 5.91) + ((total - 36) * 9.12))) + "$ by reducing 10% of your " + currentDevice + " usage");
+                applianceSave.setText("You can save " + String.format("%.2f", (((36 * 5.91) + ((total - 36) * 9.12))/100)) + "$ by reducing 10% of your " + currentDevice + " usage");
         }
         else
         {
             if (!highRate)
-                applianceSave.setText("You can save " + String.format("%.2f", ((total / 10) * 5.91)) + "$ by reducing 10% of your overall consumption");
+                applianceSave.setText("You can save " + String.format("%.2f", ((total * 5.91)/100)) + "$ by reducing 10% of your overall consumption");
             else
-                applianceSave.setText("You can save " + String.format("%.2f", ((36 * 5.91) + ((total - 36) * 9.12))) + "$ by reducing 10% of your overall consumption");
+                applianceSave.setText("You can save " + String.format("%.2f", (((36 * 5.91) + ((total - 36) * 9.12))/100)) + "$ by reducing 10% of your overall consumption");
         }
 
         int totalDays = 0;
