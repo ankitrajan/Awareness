@@ -415,7 +415,7 @@ public class MyAccountActivity extends AppCompatActivity {
             yValues.add(new PieEntry(monthDeviceData.elementAt(i).floatValue(), allMonthDevice.elementAt(i)));
         }
 
-        monthlyTotal.setText(String.format("%.2f", total));
+        monthlyTotal.setText(String.format("%.2f", total/3600));
 
         pieChart.animateY(2500,Easing.EasingOption.EaseInOutCubic);
 
