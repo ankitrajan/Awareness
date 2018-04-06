@@ -391,7 +391,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
         for(int i = 0; i < allMonthDevice.size(); i++)
         {
-            monthDeviceData.add(myDatabase.getSpecificDataTotal(allMonthDevice.elementAt(i)));
+            monthDeviceData.add(myDatabase.getSpecificMonthDataTotal(allMonthDevice.elementAt(i)));
 
             total += monthDeviceData.elementAt(i);
 
