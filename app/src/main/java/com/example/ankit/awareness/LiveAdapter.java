@@ -30,6 +30,8 @@ public class LiveAdapter extends ArrayAdapter{
     private AnimationDrawable batteryani;
     private AnimationDrawable kettleani;
     private AnimationDrawable monitorani;
+    private AnimationDrawable mixerani;
+    private AnimationDrawable unknownani;
 
     private String[] lookupName = {"kettle", "laptop charger", "mixer", "panini press"};
 
@@ -164,9 +166,9 @@ public class LiveAdapter extends ArrayAdapter{
             //batteryani = (AnimationDrawable) imageView.getBackground();
             //batteryani.start();
 
-            holder.ANIMATION.setBackgroundResource(R.drawable.batteryanimation);
-            batteryani = (AnimationDrawable) holder.ANIMATION.getBackground();
-            batteryani.start();
+            holder.ANIMATION.setBackgroundResource(R.drawable.unknownanimation);
+            unknownani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            unknownani.start();
 
         }
         else if (deviceID == 1) //dishwasher
@@ -183,9 +185,9 @@ public class LiveAdapter extends ArrayAdapter{
         }
         else if (deviceID == 3)//fridge
         {
-            holder.ANIMATION.setBackgroundResource(R.drawable.kettleanimation);
-            kettleani = (AnimationDrawable) holder.ANIMATION.getBackground();
-            kettleani.start();
+            holder.ANIMATION.setBackgroundResource(R.drawable.mixeranimation);
+            mixerani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            mixerani.start();
         }
 
         return row;
