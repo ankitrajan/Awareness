@@ -158,9 +158,9 @@ public class MyAccountActivity extends AppCompatActivity {
         Log.d(TAG, "First login value for adapter: " + firstLogin);
 
         if(!firstLogin)
-            adapterMonthly.add("All");
+            adapterMonthly.add("All","disconnected");
         else
-            adapterMonthly.add("No Connected Device");
+            adapterMonthly.add("No Connected Device","disconnected");
 
         //final SharedPreferences myPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
@@ -320,8 +320,10 @@ public class MyAccountActivity extends AppCompatActivity {
 
                     if(!((((stamp%(10000000000L))/100000000L) != month) || (((stamp%(1000000000000L))/10000000000L) != year)))
                     {
-                        if(!adapterMonthly.isAlreadyInList(deviceName))
-                            adapterMonthly.add(deviceName);
+                        if(!adapterMonthly.isAlreadyInList(deviceName)) {
+                            adapterMonthly.add(deviceName, "disconnected");
+                            adapterMonthly.notifyDataSetChanged();
+                        }
                     }
 
                     //////////////////myDataHelper.addData(addedPosition, Double.parseDouble(dataSnapshot.getValue().toString()));
@@ -332,6 +334,17 @@ public class MyAccountActivity extends AppCompatActivity {
                 else if(dataSnapshot.getKey().toString().equals("status"))
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
+
+                    if(dataSnapshot.getValue().toString().equals("connected"))
+                    {
+                        adapterMonthly.changeStatus(deviceName, "connected");
+                        adapterMonthly.notifyDataSetChanged();
+                    }
+                    else if(dataSnapshot.getValue().toString().equals("disconnected"))
+                    {
+                        adapterMonthly.changeStatus(deviceName, "disconnected");
+                        adapterMonthly.notifyDataSetChanged();
+                    }
 
                     /*
                     if(dataSnapshot.getValue().toString().equals("connected"))
@@ -346,6 +359,10 @@ public class MyAccountActivity extends AppCompatActivity {
                 if(dataSnapshot.getKey().toString().equals("status"))
                 {
                     myDatabase.changeDeviceStatus(deviceName, dataSnapshot.getValue().toString());
+
+                    adapterMonthly.changeStatus(deviceName, dataSnapshot.getValue().toString());
+                    adapterMonthly.notifyDataSetChanged();
+
                     //////Toast.makeText(getApplicationContext(), deviceName + " is now " + dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
                     setDataText();
                 }
