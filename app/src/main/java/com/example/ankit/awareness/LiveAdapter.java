@@ -165,9 +165,9 @@ public class LiveAdapter extends ArrayAdapter{
             //imageView.setBackgroundResource(R.drawable.batteryanimation);
             //batteryani = (AnimationDrawable) imageView.getBackground();
             //batteryani.start();
-            holder.ANIMATION.setBackgroundResource(R.drawable.unknownanimation);
-            unknownani = (AnimationDrawable) holder.ANIMATION.getBackground();
-            unknownani.start();
+            holder.ANIMATION.setBackgroundResource(R.drawable.kettleanimation);
+            kettleani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            kettleani.start();
         }
         else if (deviceID == 1) //monitor
         {
@@ -177,15 +177,15 @@ public class LiveAdapter extends ArrayAdapter{
         }
         else if (deviceID == 2) //mixer
         {
-            holder.ANIMATION.setBackgroundResource(R.drawable.batteryanimation);
-            batteryani = (AnimationDrawable) holder.ANIMATION.getBackground();
-            batteryani.start();
-        }
-        else if (deviceID == 3)//unknown
-        {
             holder.ANIMATION.setBackgroundResource(R.drawable.mixeranimation);
             mixerani = (AnimationDrawable) holder.ANIMATION.getBackground();
             mixerani.start();
+        }
+        else
+        {
+            holder.ANIMATION.setBackgroundResource(R.drawable.unknownanimation);
+            unknownani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            unknownani.start();
         }
 
         return row;
