@@ -31,7 +31,7 @@ public class LiveAdapter extends ArrayAdapter{
     private AnimationDrawable kettleani;
     private AnimationDrawable monitorani;
 
-    private String[] lookupName = {"kettle", "laptop charger", "mixer", "panini press"};
+    private String[] lookupName = {"kettle", "monitor", "mixer", "unknown"};
 
     private Context c;
 
@@ -157,31 +157,30 @@ public class LiveAdapter extends ArrayAdapter{
         int deviceID = (int) animation.get(position);
 
 
-        if (deviceID == 0) //heater
+        if (deviceID == 0) //kettle
         {
             //ImageView imageView = (ImageView)row.findViewById(R.id.animation_item_image);
             //imageView.setBackgroundResource(R.drawable.batteryanimation);
             //batteryani = (AnimationDrawable) imageView.getBackground();
             //batteryani.start();
 
-            holder.ANIMATION.setBackgroundResource(R.drawable.batteryanimation);
-            batteryani = (AnimationDrawable) holder.ANIMATION.getBackground();
-            batteryani.start();
-
+            holder.ANIMATION.setBackgroundResource(R.drawable.kettleanimation);
+            kettleani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            kettleani.start();
         }
-        else if (deviceID == 1) //dishwasher
+        else if (deviceID == 1) //monitor
         {
             holder.ANIMATION.setBackgroundResource(R.drawable.monitoranimation);
             monitorani = (AnimationDrawable) holder.ANIMATION.getBackground();
             monitorani.start();
         }
-        else if (deviceID == 2) //charger
+        else if (deviceID == 2) //mixer
         {
-            holder.ANIMATION.setBackgroundResource(R.drawable.kettleanimation);
-            kettleani = (AnimationDrawable) holder.ANIMATION.getBackground();
-            kettleani.start();
+            holder.ANIMATION.setBackgroundResource(R.drawable.batteryanimation);
+            batteryani = (AnimationDrawable) holder.ANIMATION.getBackground();
+            batteryani.start();
         }
-        else if (deviceID == 3)//fridge
+        else if (deviceID == 3)//unknown
         {
             holder.ANIMATION.setBackgroundResource(R.drawable.kettleanimation);
             kettleani = (AnimationDrawable) holder.ANIMATION.getBackground();
