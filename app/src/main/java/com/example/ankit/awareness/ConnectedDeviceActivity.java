@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -63,6 +64,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
     //private ArrayAdapter<String> adapterConnected;
     private ListView deviceListConnected;
+    private TextView dailyTotal;
 
     //////////private DataHelper myDataHelper;
 
@@ -128,6 +130,8 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
                 }
             }
         });
+
+        dailyTotal = (TextView) findViewById(R.id.DailyTotal);
 
         pieChartConnected = (PieChart) findViewById(R.id.piechartConnected);
         pieChartConnected.setUsePercentValues(true);
@@ -409,11 +413,18 @@ public class ConnectedDeviceActivity extends AppCompatActivity{
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
+        double total = 0;
+
         for(int i = 0; i < allDayDevice.size(); i++)
         {
             dayDeviceData.add(myDatabase.getSpecificDataTotal(allDayDevice.elementAt(i)));
+
+            total += dayDeviceData.elementAt(i);
+
             yValues.add(new PieEntry(dayDeviceData.elementAt(i).floatValue(), allDayDevice.elementAt(i)));
         }
+
+        dailyTotal.setText(String.format("%.2f", total));
 
         pieChartConnected.animateY(0, Easing.EasingOption.EaseInOutCubic); ////////////////////////////////////////////////
 

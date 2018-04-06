@@ -57,6 +57,7 @@ public class MyAccountActivity extends AppCompatActivity {
     AnalysisAdapter adapterMonthly;
     //private ArrayAdapter<String> adapterMonthly;
     private ListView deviceList;
+    private TextView monthlyTotal;
 
     ////////private DataHelper myDataHelper;
 
@@ -125,6 +126,8 @@ public class MyAccountActivity extends AppCompatActivity {
                 }
             }
         });
+
+        monthlyTotal = (TextView) findViewById(R.id.MonthlyTotal);
 
         pieChart = (PieChart) findViewById(R.id.piechart);
         pieChart.setUsePercentValues(true);
@@ -384,12 +387,18 @@ public class MyAccountActivity extends AppCompatActivity {
         yValues.add(new PieEntry(23f,"lamp"));
         */
 
+        double total = 0;
 
         for(int i = 0; i < allMonthDevice.size(); i++)
         {
             monthDeviceData.add(myDatabase.getSpecificDataTotal(allMonthDevice.elementAt(i)));
+
+            total += monthDeviceData.elementAt(i);
+
             yValues.add(new PieEntry(monthDeviceData.elementAt(i).floatValue(), allMonthDevice.elementAt(i)));
         }
+
+        monthlyTotal.setText(String.format("%.2f", total));
 
         pieChart.animateY(2500,Easing.EasingOption.EaseInOutCubic);
 
